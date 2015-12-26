@@ -4,7 +4,8 @@ var tmEnemyImageSwitching = "tmEnemyImageSwitching";
 var tmCommandSpawnTest = "tmCommandSpawnTest";
 var tmCommandMove = "tmCommandMove";
 var tmShotCreation = "tmShotCreation";
-var testMode = tmShotCreation;
+var tmPlayerControl = "tmPlayerControl";
+var testMode = tmPlayerControl;
 
 var ltc = {};
 
@@ -28,6 +29,9 @@ function prepandSwitchToTest() {
 			break;
 		case tmShotCreation:
 			prepTestShotCreation();
+			break;
+		case tmPlayerControl:
+			prepTestPlayerControl();
 			break;
 		default:
 			consolePrint("Error with test mode.", "exit");
@@ -60,6 +64,9 @@ function inputTest() {
 		case tmShotCreation:
 			inputTestShotCreation();
 			break;
+		case tmPlayerControl:
+			inputTestPlayerControl();
+			break;
 		default:
 			consolePrint("Error with test mode.", "exit");
 	}
@@ -81,6 +88,9 @@ function logicTest() {
 			break;
 		case tmShotCreation:
 			logicTestShotCreation();
+			break;
+		case tmPlayerControl:
+			logicTestPlayerControl();
 			break;
 		default:
 			consolePrint("Error with test mode.", "exit");
@@ -288,6 +298,49 @@ function logicTestShotCreation() {
 	allInvaders[0].update();
 }
 
+//----------------------------------------------------------------------------------------------------------- prep
+
+function prepTestPlayerControl() {
+	allTestVisuals = {};
+	allTestVisuals.backLayer = {};
+	allTestVisuals.midLayer = {};
+	allTestVisuals.frontLayer = {};
+
+	var atvm = allTestVisuals.midLayer;
+
+	for(var i = 0; i < 2; i++) {
+		createPlayer();
+		atvm["player"+i] = allPlayers[i].vGroup;
+		allPlayers[i].spawnAt( window.innerWidth/2, window.innerHeight/2);
+	}
+}
+
+function inputTestPlayerControl() {
+	for(var i = 0; i < allPlayers.length; i++) {
+		allPlayers[i].moveDirection = "none";
+	}
+	if( keyboardKeys["w"] === "down" ) { allPlayers[0].moveDirection = "up"; }
+	else if( keyboardKeys["s"] === "down" ) { allPlayers[0].moveDirection = "down"; }
+	if( keyboardKeys["a"] === "down" ) { allPlayers[0].moveDirection += "left"; }
+	else if( keyboardKeys["d"] === "down" ) { allPlayers[0].moveDirection += "right"; }
+
+
+	if( keyboardKeys["i"] === "down" ) { allPlayers[1].moveDirection = "up"; }
+	else if( keyboardKeys["k"] === "down" ) { allPlayers[1].moveDirection = "down"; }
+	if( keyboardKeys["j"] === "down" ) { allPlayers[1].moveDirection += "left"; }
+	else if( keyboardKeys["l"] === "down" ) { allPlayers[1].moveDirection += "right"; }
+
+
+	if( keyboardKeys["f"] === "down" ) { keyboardKeys["f"] = "none"; allPlayers[0].tryShoot = true; }
+	if( keyboardKeys["h"] === "down" ) { keyboardKeys["h"] = "none"; allPlayers[1].tryShoot = true; }
+
+}
+
+function logicTestPlayerControl() {
+	for(var i = 0; i < allPlayers.length; i++) {
+		allPlayers[i].update();
+	}
+}
 
 
 

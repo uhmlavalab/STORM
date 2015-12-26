@@ -46,6 +46,10 @@ function createShot() {
 	ent.moveUpdate = function () {
 		this.x += this.xSpeedPerSec * (dTime/1000);
 		this.y += this.ySpeedPerSec * (dTime/1000);
+
+		if( this.x < 0 || this.y < 0 || this.x > cCanvasWidth || this.y > cCanvasHeight) {
+			this.death();
+		}
 	}; //end moveUpdate
 	
     /**

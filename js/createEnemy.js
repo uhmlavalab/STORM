@@ -209,16 +209,19 @@ function createInvader() {
     				//ent.spawnAt = function (centerXvalue, centerYvalue, xDestination, yDestination, speed, affliction, size) {
     				shotref = shotFindFirstDead();
     				if(shotref !== null) { shotref.spawnAt( this.x, this.y, 	px, py, 	speed, 		"enemyShot", size); }
+			    	else { debugPrint( "Enemy unable to shoot due game reaching shot limit (" + allShots.length + ")", "enemy" ); break;}
     			}
     			//left offset first
     			else if( i % 2 === 1) {
     				shotref = shotFindFirstDead();
-    				if(shotref !== null) { shotFindFirstDead().spawnAt( this.x, this.y, 	(px - (size * 3 * Math.ceil(i/2) )) , py, 	speed, 		"enemyShot", size); }
+    				if(shotref !== null) { shotref.spawnAt( this.x, this.y, 	(px - (size * 3 * Math.ceil(i/2) )) , py, 	speed, 		"enemyShot", size); }
+			    	else { debugPrint( "Enemy unable to shoot due game reaching shot limit (" + allShots.length + ")", "enemy" ); break;}
     			}
     			//right offset
     			else if( i % 2 === 0) {
     				shotref = shotFindFirstDead();
-    				if(shotref !== null) { shotFindFirstDead().spawnAt( this.x, this.y, 	(px + (size * 3 * Math.ceil( i/2) )) , py, 	speed, 		"enemyShot", size); }
+    				if(shotref !== null) { shotref.spawnAt( this.x, this.y, 	(px + (size * 3 * Math.ceil( i/2) )) , py, 	speed, 		"enemyShot", size); }
+			    	else { debugPrint( "Enemy unable to shoot due game reaching shot limit (" + allShots.length + ")", "enemy" ); break;}
     			}
     		}
     	} //end if target player
@@ -232,7 +235,8 @@ function createInvader() {
     			px = Math.cos(radians) * 1000; //100 is an arbitrary amount just to get a position to shoot at.
     			py = Math.sin(radians) * 1000;
 				shotref = shotFindFirstDead();
-				if(shotref !== null) { shotFindFirstDead().spawnAt( this.x, this.y, 	px, py, 	speed, 		"enemyShot", size); }
+				if(shotref !== null) { shotref.spawnAt( this.x, this.y, 	px, py, 	speed, 		"enemyShot", size); }
+			    else { debugPrint( "Enemy unable to shoot due game reaching shot limit (" + allShots.length + ")", "enemy" ); break;}
 				degreeToShoot += degreeChange;
     		}
     	}
@@ -275,8 +279,8 @@ function invaderSetTypeAttributes(ent, type) {
 	if( allSpriteObjects[visualToUse] === null) { consolePrint( "Error: invader type did not specify valid visual:" + type , "exit"); }
 
 	ent.vImage.setImage( allSpriteObjects[visualToUse] );
-	ent.width = allSpriteObjects['en1'].width;
-	ent.height = allSpriteObjects['en1'].height;
+	//ent.width = allSpriteObjects['en1'].width;
+	//ent.height = allSpriteObjects['en1'].height;
 	ent.hp = hpToUse;
 
 } //end invaderSetTypeAttributes

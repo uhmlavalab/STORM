@@ -16,6 +16,7 @@ var stage;
 var allEntities 	= [];
 var allInvaders 	= [];
 var allShots 		= [];
+var allPlayers 		= [];
 
 //gameState tracking
 var gameState 		= "none";
