@@ -21,7 +21,7 @@ function createShot() {
 		ent.ySpeedPerSec 	= 0;
 		ent.xDestination 	= 0;
 		ent.yDestination 	= 0;
-		ent.affliction 		= 0; //TODO use to determine which elements this hits.
+		ent.affliction 		= "none"; //TODO use to determine which elements this hits.
 
 		shotCreateVisual(ent); //TODO double check this.
 
@@ -47,7 +47,7 @@ function createShot() {
 		this.x += this.xSpeedPerSec * (dTime/1000);
 		this.y += this.ySpeedPerSec * (dTime/1000);
 
-		if( this.x < 0 || this.y < 0 || this.x > cCanvasWidth || this.y > cCanvasHeight) {
+		if( this.x < -50 || this.y < -50 || this.x > cCanvasWidth + 50 || this.y > cCanvasHeight + 50) {
 			this.death();
 		}
 	}; //end moveUpdate
@@ -56,11 +56,17 @@ function createShot() {
     Overrides the death function on entity.
     */
 	ent.death = function () {
+		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
 		//remove sprite code here
 		this.x = -100;
 		this.y = -100;
 		this.moveVisualsToCoordinates();
+
+		if( typeof this.affliction === "number" ) {
+			allPlayers[ this.affliction ].activeShots--;
+			this.affliction = "none";
+		}
 	};
 	
     /**
@@ -70,6 +76,7 @@ function createShot() {
 
     */
     ent.spawnAt = function (centerXvalue, centerYvalue, xDestination, yDestination, speed, affliction, size) {
+        this.addToUpdater();
         this.hp = 1;
         this.isAlive = true;
         this.x = centerXvalue;
@@ -97,6 +104,33 @@ function createShot() {
         shotDetermineSpeedForDestination(this);
 
     };//takes parameters of where you want to spawn entity 
+
+    /**
+	Shot collision mechanics depend on their affliction.
+	basically if not a number then it probably belongs to enemies.
+
+    */
+    ent.collisionEffects = function( thingCollidedWith ) {
+    	//don't check against other shots or explosions.
+    	//this is intended as a means to reduce computation requirements.
+    	var tcwType = thingCollidedWith.type;
+    	if(tcwType === "shot" || tcwType === "explosion" ) { return; }
+
+
+
+    	var belongToPlayer = false;
+    	if( typeof this.affliction === "number" ) { belongToPlayer = true; }
+
+    	//if a player shot makes contact with an 
+    	if( belongToPlayer && tcwType === "invader" && areEntitiesTouching(this, thingCollidedWith) ) {
+    		thingCollidedWith.damage(1);
+    		this.death();
+    	}
+    	else if ( !belongToPlayer && tcwType === "player" && areEntitiesTouching(this, thingCollidedWith) ) {
+    		thingCollidedWith.damage(1);
+    		this.death();
+    	}
+    }; //end collisionEffects
 
 	
 	allShots.push( ent );

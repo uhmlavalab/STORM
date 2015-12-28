@@ -86,6 +86,7 @@ function createInvader() {
     Overrides the death function on entity.
     */
 	ent.death = function () {
+		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
 		//remove sprite code here
 		this.x = -100;
@@ -100,6 +101,7 @@ function createInvader() {
     Type determines attributes: visual, width, height.
     */
     ent.spawnAt = function (centerXvalue, centerYvalue, type) {
+    	this.addToUpdater();
         this.hp = 1;
         this.isAlive = true;
         this.x = centerXvalue;
@@ -112,6 +114,13 @@ function createInvader() {
 
         invaderSetTypeAttributes(this, type);
     };//takes parameters of where you want to spawn entity 
+
+    /**
+	At least for the time being, enemies do not have collision effects on other things.
+    */
+    ent.collisionEffects = function() {
+
+    };
 
     /** Adds a movement command. Must be an object. Properties
     	time
@@ -203,6 +212,23 @@ function createInvader() {
     	}
 
     	if(target === "player") {
+
+    		var rp;
+    		var alivePlayer = false;
+    		for(var i = 0; i < allPlayers.length; i++) {
+    			if( allPlayers[i].isAlive) { alivePlayer = true; break; }
+    		}
+    		if(alivePlayer) {
+    			rp = parseInt(  Math.random() * allPlayers.length );
+    			while( ! allPlayers[rp].isAlive ) { rp = parseInt(  Math.random() * allPlayers.length ); }
+    			px = allPlayers[rp].x;
+    			py = allPlayers[rp].y;
+    		}
+    		else {
+    			px = cCanvasWidth/2;
+    			py = cCanvasHeight;
+    		}
+
 
     		for(var i = 0; i < amountOfShots; i++) {
     			if(i===0){
@@ -299,8 +325,10 @@ function invaderCreateVisual(ref){
 		width: allSpriteObjects['en1'].width,
 		height: allSpriteObjects['en1'].height
 	});
-
 	ref.vGroup.add(ref.vImage);
+
+	ref.width = allSpriteObjects['en1'].width;
+	ref.height = allSpriteObjects['en1'].height;
 
 	// ref.vSprite = new Konva.Sprite({
 	// 	x: -cInvaderWidth/2,

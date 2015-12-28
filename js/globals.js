@@ -17,6 +17,7 @@ var allEntities 	= [];
 var allInvaders 	= [];
 var allShots 		= [];
 var allPlayers 		= [];
+var allEntitiesToUpdate = []; //an experiment with self accounting entities.
 
 //gameState tracking
 var gameState 		= "none";
@@ -78,7 +79,30 @@ function consolePrint(stringToPrint, exit) {
 	if( exit === "exit" ) { throw new Error("Something went badly wrong!"); }
 }
 
+/**
+Must be derived from the createEntity class to get the correct getEncompassingRectangle function.
+*/
+function areEntitiesTouching( e1, e2 ) {
+	return areRectanglesTouching( e1.getEncompassingRectangle(), e2.getEncompassingRectangle() );
+}
 
-
-
+/**
+Assumes both params are rects. They have
+x - center value
+y - center value
+width
+height
+Returns true if rectangles are touching.
+*/
+function areRectanglesTouching( r1, r2 ) {
+	if(
+		(r1.x < r2.x + r2.width)
+		&& (r1.x + r1.width > r2.x)
+		&& (r1.y < r2.y + r2.height)
+		&& (r1.y + r1.height > r2.y )
+		) {
+		return true;
+	}
+	return false;
+} //end areRectanglesTouching
 

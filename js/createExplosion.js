@@ -48,6 +48,7 @@ function createExplosion() {
     Overrides the death function on entity.
     */
 	ent.death = function () {
+		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
 		//remove sprite code here
 		this.x = -100;
@@ -62,6 +63,7 @@ function createExplosion() {
     Type determines attributes: visual, width, height.
     */
     ent.spawnAt = function (centerXvalue, centerYvalue, type) {
+    	this.addToUpdater();
         this.hp = 1;
         this.isAlive = true;
         this.x = centerXvalue;
@@ -74,6 +76,13 @@ function createExplosion() {
 
         explosionSetTypeAttributes(this, type);
     };//takes parameters of where you want to spawn entity 
+
+    /**
+    At the moment no collision effects for explosions.
+    */
+    ent.collisionEffects = function() {
+
+    };
 
 	
 	allExplosions.push( ent );

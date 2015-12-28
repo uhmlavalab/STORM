@@ -5,7 +5,8 @@ var tmCommandSpawnTest = "tmCommandSpawnTest";
 var tmCommandMove = "tmCommandMove";
 var tmShotCreation = "tmShotCreation";
 var tmPlayerControl = "tmPlayerControl";
-var testMode = tmPlayerControl;
+var tmShotCollision = "tmShotCollision";
+var testMode = tmShotCollision;
 
 var ltc = {};
 
@@ -32,6 +33,9 @@ function prepandSwitchToTest() {
 			break;
 		case tmPlayerControl:
 			prepTestPlayerControl();
+			break;
+		case tmShotCollision:
+			prepTestShotCollision();
 			break;
 		default:
 			consolePrint("Error with test mode.", "exit");
@@ -67,6 +71,9 @@ function inputTest() {
 		case tmPlayerControl:
 			inputTestPlayerControl();
 			break;
+		case tmShotCollision:
+			inputTestShotCollision();
+			break;
 		default:
 			consolePrint("Error with test mode.", "exit");
 	}
@@ -91,6 +98,9 @@ function logicTest() {
 			break;
 		case tmPlayerControl:
 			logicTestPlayerControl();
+			break;
+		case tmShotCollision:
+			logicTestShotCollision();
 			break;
 		default:
 			consolePrint("Error with test mode.", "exit");
@@ -313,6 +323,14 @@ function prepTestPlayerControl() {
 		atvm["player"+i] = allPlayers[i].vGroup;
 		allPlayers[i].spawnAt( window.innerWidth/2, window.innerHeight/2);
 	}
+
+	for(var i = 0; i < 30; i++) {
+		createShot();
+		atvm["shot"+i] = allShots[i].vGroup;
+		allShots[i].death();
+	}
+	
+
 }
 
 function inputTestPlayerControl() {
@@ -340,9 +358,78 @@ function logicTestPlayerControl() {
 	for(var i = 0; i < allPlayers.length; i++) {
 		allPlayers[i].update();
 	}
+	for(var i = 0; i < allShots.length; i++) {
+		allShots[i].update();
+	}
 }
 
 
+//----------------------------------------------------------------------------------------------------------- prep
+
+function prepTestShotCollision() {
+	allTestVisuals = {};
+	allTestVisuals.backLayer = {};
+	allTestVisuals.midLayer = {};
+	allTestVisuals.frontLayer = {};
+
+	var atvm = allTestVisuals.midLayer;
+
+	for(var i = 0; i < 5; i++) {
+		createInvader();
+		atvm["invader"+i] = allInvaders[i].vGroup;
+		allInvaders[i].spawnAt( window.innerWidth/6 * (i + 1), window.innerHeight/4, "visual:en1,hp:1");
+		allInvaders[i].addShootIntervalCommand({"time": 3000, "command": "shootInterval", "type": "amountOfShots:1,speed:100,target:player" });
+	}
+	for(var i = 0; i < 2; i++) {
+		createPlayer();
+		atvm["player"+i] = allPlayers[i].vGroup;
+		allPlayers[i].spawnAt( 300, cCanvasHeight - 100 );
+	}
+	for(var i = 0; i < 100; i++) {
+		createShot();
+		atvm["shot"+i] = allShots[i].vGroup;
+		allShots[i].death();
+	}
+
+
+}
+
+function inputTestShotCollision() {
+	for(var i = 0; i < allPlayers.length; i++) {
+		allPlayers[i].moveDirection = "none";
+	}
+	if( keyboardKeys["w"] === "down" ) { allPlayers[0].moveDirection = "up"; }
+	else if( keyboardKeys["s"] === "down" ) { allPlayers[0].moveDirection = "down"; }
+	if( keyboardKeys["a"] === "down" ) { allPlayers[0].moveDirection += "left"; }
+	else if( keyboardKeys["d"] === "down" ) { allPlayers[0].moveDirection += "right"; }
+
+
+	if( keyboardKeys["i"] === "down" ) { allPlayers[1].moveDirection = "up"; }
+	else if( keyboardKeys["k"] === "down" ) { allPlayers[1].moveDirection = "down"; }
+	if( keyboardKeys["j"] === "down" ) { allPlayers[1].moveDirection += "left"; }
+	else if( keyboardKeys["l"] === "down" ) { allPlayers[1].moveDirection += "right"; }
+
+
+	if( keyboardKeys["f"] === "down" ) { keyboardKeys["f"] = "none"; allPlayers[0].tryShoot = true; }
+	if( keyboardKeys["h"] === "down" ) { keyboardKeys["h"] = "none"; allPlayers[1].tryShoot = true; }
+
+}
+
+function logicTestShotCollision() {
+
+	for(var i = 0; i < allEntitiesToUpdate.length; i++) {
+		allEntitiesToUpdate[i].update();
+	}
+
+
+	for(var i = 0; i < allEntitiesToUpdate.length; i++) {
+		for(var j = i + 1; j < allEntitiesToUpdate.length; j++) {
+			allEntitiesToUpdate[i].collisionEffects( allEntitiesToUpdate[j] );
+			allEntitiesToUpdate[j].collisionEffects( allEntitiesToUpdate[i] );
+		}
+	}
+
+}
 
 
 

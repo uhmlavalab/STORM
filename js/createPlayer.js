@@ -17,11 +17,11 @@ function createPlayer() {
 		ent.justDied 		= false;
 		ent.speed 			= 200; //per second in pixels
 		ent.score 			= 0;
-		ent.shotLimit 		= 1;
+		ent.shotLimit 		= 2;
 		ent.absoluteShotLimit = 10;
 		ent.activeShots		= 0; //TODO maybe find a better way for this to work.
-		ent.shotSpeed 		= 10;
-		ent.shotSpeedDefault = 10;
+		ent.shotSpeed 		= 300;
+		ent.shotSpeedDefault = 300;
 		ent.shotSize 		= 16;
 		ent.shotSizeDefault = 16;
 		ent.moveDirection 	= 'none';
@@ -66,12 +66,18 @@ function createPlayer() {
 		this.x += xmod * timeMod;
 		this.y += ymod * timeMod;
 
+		if( this.x < 0 ) { this.x = 0; }
+		else if( this.x > cCanvasWidth ) { this.x = cCanvasWidth; }
+		if( this.y < 0 ) { this.y = 0; }
+		else if( this.y > cCanvasHeight ) { this.y = cCanvasHeight; }
+
 	}; //end moveUpdate
 	
     /**
     Overrides the death function on entity.
     */
 	ent.death = function () {
+		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
 		//remove sprite code here
 		this.x = -100;
@@ -92,11 +98,19 @@ function createPlayer() {
     Type determines attributes: visual, width, height.
     */
     ent.spawnAt = function (centerXvalue, centerYvalue) {
+    	this.addToUpdater();
         this.hp = 1;
         this.isAlive = true;
         this.x = centerXvalue;
         this.y = centerYvalue;
     };//takes parameters of where you want to spawn entity 
+
+    /**
+	At least for the time being, players do not have collision effects on other things.
+    */
+    ent.collisionEffects = function() {
+
+    };
 
 
     /**
@@ -106,14 +120,17 @@ function createPlayer() {
     	if(this.tryShoot !== true) { return; }
     	this.tryShoot = false;
 
-    	if(this.activeShots >= this.shotLimit) { debugPrint( "Player reached mechanical limit  (" + this.shotLimit + ")", "player" ); ;return; }
+    	if(this.activeShots >= this.shotLimit) {
+    		debugPrint( "Player reached mechanical limit  (" + this.shotLimit + ")", "player" );
+    		return;
+    	}
+
     	var shotToUse = shotFindFirstDead();
     	if( shotToUse === null ) { debugPrint( "Player unable to shoot due game reaching shot limit (" + allShots.length + ")", "player" ); return; }
     	//parameters 		xspawn 	yspawn 	xdest 	ydest			
     	shotToUse.spawnAt( this.x, this.y, 	this.x, this.y - 1000, 	this.shotSpeed, 		allPlayers.indexOf(this), this.shotSize);
     	this.activeShots++;
 
-    	consolePrint( "Dont forget to take into account shot return", "exit" );
 
     } //end shootUpdate
 
@@ -137,8 +154,10 @@ function playerCreateVisual(ref){
 		width: allSpriteObjects['ac3'].width,
 		height: allSpriteObjects['ac3'].height
 	});
-
 	ref.vGroup.add(ref.vImage);
+
+	ref.width = allSpriteObjects['ac3'].width;
+	ref.height = allSpriteObjects['ac3'].height;
 
 } //end playerCreateVisual
 
