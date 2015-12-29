@@ -81,6 +81,11 @@ function setupSpriteImageObjects() {
 	allSpriteObjects['shot'] = new Image();
 	allSpriteObjects['shot'].src = 'assets/shoot_simple.png';
 
+	allSpriteObjects['explode1'] = new Image();
+	allSpriteObjects['explode1'].src = 'assets/explosion_1.png';
+	allSpriteObjects['explode2'] = new Image();
+	allSpriteObjects['explode2'].src = 'assets/explosion_2.png';
+
 
 
 } //end setupSpriteImageObjects

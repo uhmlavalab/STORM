@@ -17,6 +17,7 @@ var allEntities 	= [];
 var allInvaders 	= [];
 var allShots 		= [];
 var allPlayers 		= [];
+var allExplosions 	= [];
 var allEntitiesToUpdate = []; //an experiment with self accounting entities.
 
 //gameState tracking

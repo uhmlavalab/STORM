@@ -377,7 +377,7 @@ function prepTestShotCollision() {
 	for(var i = 0; i < 5; i++) {
 		createInvader();
 		atvm["invader"+i] = allInvaders[i].vGroup;
-		allInvaders[i].spawnAt( window.innerWidth/6 * (i + 1), window.innerHeight/4, "visual:en1,hp:1");
+		allInvaders[i].spawnAt( window.innerWidth/40 * (i + 1), window.innerHeight/4, "visual:en1,hp:1");
 		allInvaders[i].addShootIntervalCommand({"time": 3000, "command": "shootInterval", "type": "amountOfShots:1,speed:100,target:player" });
 	}
 	for(var i = 0; i < 2; i++) {
@@ -390,6 +390,14 @@ function prepTestShotCollision() {
 		atvm["shot"+i] = allShots[i].vGroup;
 		allShots[i].death();
 	}
+
+	for(var i = 0; i < 10; i++) {
+		createExplosion();
+		allTestVisuals.frontLayer["explosion"+i] = allExplosions[i].vGroup;
+		allExplosions[i].death();
+	}
+
+	explosionFindFirstDead().spawnAt(100,100);
 
 
 }

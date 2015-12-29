@@ -17,7 +17,7 @@ function createExplosion() {
 		ent.imageType		= 0; // 1 vs 2
 		ent.imageFrames 	= [];
 		ent.currentFrame 	= 0;
-		ent.frameDuration 	= 200; //milliseconds
+		ent.frameDuration 	= 50; //milliseconds
 		ent.frameTimeCounter = 0;
 
 		explosionCreateVisual(ent); //TODO double check this.
@@ -31,7 +31,6 @@ function createExplosion() {
 
 		if(this.isAlive) {
 			this.moveUpdate();
-			this.shootUpdate();
 		}
 		//end of update always update the visual
 		this.moveVisualsToCoordinates();
@@ -42,6 +41,18 @@ function createExplosion() {
 	Movement will be based upon given orders.
 	*/
 	ent.moveUpdate = function () {
+		this.frameTimeCounter += dTime;
+		if(this.frameTimeCounter >= this.frameDuration) {
+			this.frameTimeCounter = 0;
+			this.currentFrame++;
+
+			if( this.currentFrame >= this.imageFrames.length ) {
+				this.death();
+			}
+			else {
+				this.vImage.crop( this.imageFrames[ this.currentFrame ] );
+			}
+		}
 	}; //end moveUpdate
 	
     /**
@@ -62,19 +73,15 @@ function createExplosion() {
     Hp set to given value.
     Type determines attributes: visual, width, height.
     */
-    ent.spawnAt = function (centerXvalue, centerYvalue, type) {
+    ent.spawnAt = function (centerXvalue, centerYvalue) {
     	this.addToUpdater();
         this.hp = 1;
         this.isAlive = true;
         this.x = centerXvalue;
         this.y = centerYvalue;
-        this.mcTimeStart = -1;
-
-        while(this.moveCommands.length > 0) { this.moveCommands.pop(); }
-        while(this.shootAtTimeCommands.length > 0) { this.shootAtTimeCommands.pop(); }
-        while(this.shootIntervalCommands.length > 0) { this.shootIntervalCommands.pop(); }
-
-        explosionSetTypeAttributes(this, type);
+        this.currentFrame = 0;
+        this.vImage.crop( this.imageFrames[this.currentFrame] );
+        this.frameTimeCounter = 0;
     };//takes parameters of where you want to spawn entity 
 
     /**
@@ -99,7 +106,7 @@ function explosionCreateVisual(ref){
 
 	var explosionImage = "explode1";
 	ref.imageType = 1;
-	if(allExplosions.indexOf(ref) % 2 === 0) { explosionImage = "explode2"; ref.imageType = 2; }
+	if(allExplosions.length % 2 === 1) { explosionImage = "explode2"; ref.imageType = 2; }
 
 	var xf = 0;
 	var yf = 0;
@@ -120,11 +127,12 @@ function explosionCreateVisual(ref){
 
 
 	ref.vImage = new Konva.Image({
-		x: -16,
-		y: -16,
+		x: -32,
+		y: -32,
 		image: allSpriteObjects[explosionImage],
-		width: 32,
-		height: 32
+		//width: 32,
+		width: 64,
+		height: 64
 	});
 
 	ref.vGroup.add(ref.vImage);

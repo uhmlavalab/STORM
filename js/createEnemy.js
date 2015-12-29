@@ -88,10 +88,19 @@ function createInvader() {
 	ent.death = function () {
 		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
+
+		//caues explosion before moving offscreen
+		var exp = explosionFindFirstDead();
+		if(exp !== null) {
+			console.log("Spawn explosion");
+			exp.spawnAt( this.x, this.y );
+		}
+
 		//remove sprite code here
 		this.x = -100;
 		this.y = -100;
 		this.moveVisualsToCoordinates();
+
 	};
 	
     /**
