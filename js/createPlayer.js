@@ -18,10 +18,11 @@ function createPlayer() {
 		ent.speed 			= 200; //per second in pixels
 		ent.score 			= 0;
 		ent.shotLimit 		= 2;
+		ent.defaultShotLimit = 2;
 		ent.absoluteShotLimit = 10;
 		ent.activeShots		= 0; //TODO maybe find a better way for this to work.
-		ent.shotSpeed 		= 300;
-		ent.shotSpeedDefault = 300;
+		ent.shotSpeed 		= 400;
+		ent.shotSpeedDefault = 400;
 		ent.shotSize 		= 16;
 		ent.shotSizeDefault = 16;
 		ent.moveDirection 	= 'none';
@@ -88,9 +89,6 @@ function createPlayer() {
 		this.x = -100;
 		this.y = -100;
 
-		this.shotSpeed = this.shotSpeedDefault;
-		this.shotSize = this.shotSizeDefault;
-		this.shotLimit = 1;
 
 
 		this.moveVisualsToCoordinates();
@@ -108,6 +106,9 @@ function createPlayer() {
         this.isAlive = true;
         this.x = centerXvalue;
         this.y = centerYvalue;
+		this.shotSpeed = this.shotSpeedDefault;
+		this.shotSize = this.shotSizeDefault;
+		this.shotLimit = this.defaultShotLimit;
     };//takes parameters of where you want to spawn entity 
 
     /**
@@ -133,7 +134,7 @@ function createPlayer() {
     	var shotToUse = shotFindFirstDead();
     	if( shotToUse === null ) { debugPrint( "Player unable to shoot due game reaching shot limit (" + allShots.length + ")", "player" ); return; }
     	//parameters 		xspawn 	yspawn 	xdest 	ydest			
-    	shotToUse.spawnAt( this.x, this.y, 	this.x, this.y - 1000, 	this.shotSpeed, 		allPlayers.indexOf(this), this.shotSize);
+    	shotToUse.spawnAt( this.x, this.y, 	this.x + 1000, this.y, 	this.shotSpeed, 		allPlayers.indexOf(this), this.shotSize);
     	this.activeShots++;
     	debugPrint("Player" + allPlayers.indexOf(this) + " activating shot", "player");
 

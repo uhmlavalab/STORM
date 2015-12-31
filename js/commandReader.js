@@ -13,7 +13,10 @@ commandProcessing.loadList = function(arrayOfStringsToLoad) {
 	debugPrint( "", "command" );
 	debugPrint( "", "command" );
 	debugPrint( "Loading Commands:", "command" );
+	//remove all current commands
 	while(commandProcessing.commandList.length > 0) { commandProcessing.commandList.pop(); }
+	
+	//load all the commands
 	for(var i = 0; i < arrayOfStringsToLoad.length; i++) {
 		commandProcessing.commandList.push( arrayOfStringsToLoad[i] );
 		debugPrint( arrayOfStringsToLoad[i], "command" );
@@ -25,15 +28,23 @@ commandProcessing.loadList = function(arrayOfStringsToLoad) {
 	
 //-----------------------------------------------------------------------------------------------------------
 /**
+Called in the logic loop.
 
+Based on the stageTime.
 */
 commandProcessing.handleTimingOfCommands = function() {
 	var partsOfCommand;
 	//for each command
 	for(var i = 0; i < commandProcessing.commandList.length; i++) {
-
 		//get the parts
 		partsOfCommand = commandProcessing.commandList[i].split("|");
+
+		/*
+		Currently handles
+		- discarding of lines without pipes | usually comments or descriptions.
+		- spawn when listed time has passed
+		- haltUntil, moveToBy,dieAt
+		*/
 
 		//if there are less than two pieces no | in the line, it must / probably is a comment.
 		if(partsOfCommand.length < 2) {
@@ -41,7 +52,6 @@ commandProcessing.handleTimingOfCommands = function() {
 			commandProcessing.commandList.splice(i,1);
 			i--;
 		}
-
 		//see if it is a spawn command
 		else if( (partsOfCommand[1].indexOf('spawn') >= 0) && ( parseInt( partsOfCommand[0] ) < stageTime) ) {
 			debugPrint( "Attempting to handle command:" + commandProcessing.commandList[i], "command");
@@ -55,6 +65,8 @@ commandProcessing.handleTimingOfCommands = function() {
 			(partsOfCommand[1].indexOf('haltUntil') >= 0  ) 
 			|| (partsOfCommand[1].indexOf('moveToBy') >= 0  ) 
 			|| (partsOfCommand[1].indexOf('dieAt') >= 0  ) 
+			|| (partsOfCommand[1].indexOf('shootAtTime') >= 0  ) 
+			|| (partsOfCommand[1].indexOf('shootInterval') >= 0  ) 
 			){
 			commandProcessing.cmdProcessLine( partsOfCommand );
 
@@ -116,9 +128,25 @@ commandProcessing.cmdProcessLine = function ( partsOfCommand ) {
 			cmd.type = partsOfCommand[1];
 			commandProcessing.currentInvader.addMoveCommand( cmd );
 			break;
-		//	0			1
-		// time 	| shootAt
-		case "shootAt":
+		//	0			1		2
+		// time 	| shootAt | type
+		case "shootAtTime":
+			var cmd = {};
+			cmd.time = parseInt(partsOfCommand[0]);
+			cmd.command = partsOfCommand[1];
+			cmd.type = partsOfCommand[2];
+			commandProcessing.currentInvader.addShootAtTimeCommand( cmd );
+			break;
+		//	0			1		2 		3
+		// time 	| shootAt | type |
+		//								need to add counter
+		case "shootInterval":
+			var cmd = {};
+			cmd.time = parseInt(partsOfCommand[0]);
+			cmd.command = partsOfCommand[1];
+			cmd.type = partsOfCommand[2];
+			cmd.counter = 0;
+			commandProcessing.currentInvader.addShootIntervalCommand( cmd );
 			break;
 
 		default:

@@ -38,8 +38,8 @@ var mouseKeys 		= {};
 //-----------------------------------------------------------------------------------------------------------Constants
 //all constants prefixed with c
 var cMainUpdaterInterval 	= 10; //milliseconds.
-var cCanvasWidth			= window.innerWidth * 0.9; //TODO fix me, this needs to be a different value for the sake of consistency
-var cCanvasHeight 			= window.innerHeight * 0.9;
+var cCanvasWidth			= 1535; //TODO fix me, this needs to be a different value for the sake of consistency
+var cCanvasHeight 			= 860;
 var cPiOver180 				= Math.PI / 180;
 var c180OverPi 				= 180 / Math.PI;
 
