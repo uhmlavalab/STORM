@@ -84,7 +84,7 @@ function createEntity() {
 			this.hp -= amountOfDamageBeingTaken;
 			//debugPrint('DAMAGE confirm hp:' + currentHp + ' ent hp:' + this.hp + "damage amount: " +amountOfDamageBeingTaken, "entity");
 			if (this.hp <= 0) {//hp check
-				this.death();//call to the Death function 
+				this.death(true);//call to the Death function 
 			}
 		}
 	};

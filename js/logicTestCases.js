@@ -13,7 +13,7 @@ var ltc = {};
 /**
 Handles all preparation needed for testing.
 */
-function prepandSwitchToTest() {
+function prepAndSwitchToTest() {
 	gameState = gsTest;
 	stageTimeStart = Date.now();
 
@@ -45,7 +45,7 @@ function prepandSwitchToTest() {
 
 	placeScreenVisuals(allTestVisuals);
 
-} //end prepandSwitchToTest
+} //end prepAndSwitchToTest
 
 
 //-----------------------------------------------------------------------------------------------------------

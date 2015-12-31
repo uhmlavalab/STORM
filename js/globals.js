@@ -20,10 +20,6 @@ var allPlayers 		= [];
 var allExplosions 	= [];
 var allEntitiesToUpdate = []; //an experiment with self accounting entities.
 
-//gameState tracking
-var gameState 		= "none";
-var	gsTest	 		= "test";
-
 //time variables
 var stageTimeStart	= 0;
 var stageTime		= 0;
@@ -31,6 +27,8 @@ var dTime 			= 0;
 
 //visual structures
 var allTestVisuals;
+var allMenuVisuals;
+var allGameVisuals;
 
 //input related
 var keyboardKeys 	= {};
@@ -44,6 +42,13 @@ var cCanvasWidth			= window.innerWidth * 0.9; //TODO fix me, this needs to be a 
 var cCanvasHeight 			= window.innerHeight * 0.9;
 var cPiOver180 				= Math.PI / 180;
 var c180OverPi 				= 180 / Math.PI;
+
+//gameState tracking
+var gameState 		= "none";
+var	gsTest	 		= "test";
+var	gsMenu	 		= "menu";
+var gsGame 			= "game";
+
 
 //-----------------------------------------------------------------------------------------------------------Debug
 var debug 		= {};

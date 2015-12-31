@@ -23,6 +23,7 @@ function createInvader() {
 		ent.mcYStart 	= -1;
 		ent.shootAtTimeCommands	= []; //array of command objects.
 		ent.shootIntervalCommands	= []; //array of command objects.
+		ent.lastHitByPlayer = -1;
 
 		invaderCreateVisual(ent); //TODO double check this.
 
@@ -85,16 +86,23 @@ function createInvader() {
     /**
     Overrides the death function on entity.
     */
-	ent.death = function () {
+	ent.death = function (deathByDamage) {
 		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
 
 		//caues explosion before moving offscreen
 		var exp = explosionFindFirstDead();
 		if(exp !== null) {
-			console.log("Spawn explosion");
 			exp.spawnAt( this.x, this.y );
 		}
+
+		//score credit the player
+		console.log("Death by damage:" + deathByDamage + ". And player ref: " + this.lastHitByPlayer );
+		if(deathByDamage !== null && deathByDamage && this.lastHitByPlayer !== -1) {
+			allPlayers[ this.lastHitByPlayer ].score++;
+			console.log("credit score");
+		}
+		ent.lastHitByPlayer = -1;
 
 		//remove sprite code here
 		this.x = -100;

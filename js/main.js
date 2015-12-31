@@ -13,16 +13,20 @@ function main() {
 	setupKonvaCanvas();
 	setupSpriteImageObjects();
 
-	prepandSwitchToTest(); //TODO disable this later
-
-
 	// stupidCookies();
 
-	// setupMenuVisuals();
-	// setupGameVisuals();
+	setupMenuVisuals();
+	setupGameVisuals();
 	// setupResultVisuals();
 
-	// prepandSwitchToMenu();
+
+
+
+	prepAndSwitchToMenu();
+	//prepAndSwitchToTest(); //only one prep and switch should be active
+
+
+
 
 	setInterval(mainUpdater, cMainUpdaterInterval); //start the main update
 	console.log("Done");
@@ -40,22 +44,22 @@ function mainUpdater() {
 	switch(gameState) {
 		case gsTest:
 			inputTest();
-			logicTest();	
+			logicTest();
 			break;
-		// case gsMenu:
-		// 	inputMenu();
-		// 	logicMenu();
-		// 	break;
-		// case gsGame:
-		// 	inputGame();
-		// 	logicGame();
-		// 	break;
+		case gsMenu:
+			inputMenu();
+			logicMenu();
+			break;
+		case gsGame:
+			inputGame();
+			logicGame();
+			break;
 		// case gsResult:
 		// 	inputResult();
 		// 	logicResult();
 		// 	break;
 		default:
-			console.log('Error: unknown game state:' + gameState);
+			consolePrint('Error: unknown game state:' + gameState, "exit");
 			break;
 	}
 	//update time;

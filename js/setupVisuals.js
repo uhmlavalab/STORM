@@ -101,38 +101,6 @@ function setupSpriteImageObjects() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*
 One time call from main.
 Creates all visuals to be used in the menu gameState.
@@ -207,14 +175,15 @@ function setupMenuVisuals() {
 	amv.topScore3.text( 'ive seen' );
 
 
-
-
-
-
-
-
-
 } //end setupMenuVisuals
+
+
+
+
+
+
+
+
 
 
 /*
@@ -229,72 +198,145 @@ function setupGameVisuals() {
 	allGameVisuals.midLayer = {};
 	allGameVisuals.frontLayer = {};
 
-	var agv = allGameVisuals.backLayer;
+	var agv = allGameVisuals.backLayer; //-------------------------------------------------backlayer
 
-	agv.title = new Konva.Text({
-		text: 'In Game',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'greem'
+	agv.blackBackdrop = new Konva.Rect({
+		x:0,
+		y:0,
+		width:cCanvasWidth,
+		height:cCanvasHeight,
+		fill: 'darkgray'
 	});
-	agv.title.x( cCanvasWidth/2 - agv.title.getTextWidth()/2 );
-	agv.title.y( cCanvasHeight/2 - agv.title.getTextHeight()/2 );
+	//create the players, invaders, and shots in the back layer
 
-	startInGameBackground(agv);
-
-	agv = allGameVisuals.midLayer;
-
-	//create players
-	for(var i = 0; i < 2; i++) {
-		var dir;
-		if(i == 0) {dir = 'right';} else { dir = 'left';}
-		allPlayers.push( createPlayer(dir) );
-		agv[ 'pGroup' + i ] = allPlayers[ allPlayers.length -1 ].vGroup;
-
-		//need to get bullets visuals
-		for(var b = 0; b < allPlayers[ allPlayers.length -1 ].allBullets.length; b++) {
-			agv['pbGroup' + i + b] = allPlayers[ allPlayers.length -1 ].allBullets[b].vGroup;
-		}
+	for(var i = 0; i < 4; i++) {
+		createPlayer();
+		agv["player"+i] = allPlayers[i].vGroup;
+	}
+	for(var i = 0; i < 5; i++) {
+		createInvader();
+		agv["invader"+i] = allInvaders[i].vGroup;
+	}
+	for(var i = 0; i < 100; i++) {
+		createShot();
+		agv["shot"+i] = allShots[i].vGroup;
 	}
 
-	//create invader
-	var totalInvadersNeededToBeCreated = cInvColSize * cInvRowSize * 2;
-	for ( var i = 0; i < totalInvadersNeededToBeCreated ; i++) {
-		if(i < totalInvadersNeededToBeCreated/2 ) {
-			allInvaders.push( createInvader(1, 'left') );
-		} else { 
-			allInvaders.push( createInvader(1, 'right') );
-		}
-		agv[ 'invGroup' + i] = allInvaders[ allInvaders.length - 1 ].vGroup;
+	agv = allGameVisuals.midLayer; //-------------------------------------------------midlayer
 
-		for(var b = 0; b < allInvaders[ allInvaders.length - 1 ].allBullets.length; b++ ) {
-			agv[ 'invGroupBullet' + i + 'bullid' + b ] = allInvaders[ allInvaders.length -1 ].allBullets[b].vGroup;
-		}
+	//make explosions in the back layer (unsure if ok here)
+	for(var i = 0; i < 20; i++) {
+		createExplosion();
+		agv["explosion"+i] = allExplosions[i].vGroup;
+		allExplosions[i].death();
 	}
 
 
-	avg = allGameVisuals.frontLayer;
-	avg.p1score = new Konva.Text({
-		text: 'Score: 0',
-		fontSize: cP1StartingX - 20,
-		fontFamily: 'Courier',
-		fill: 'green'
-	});
-	avg.p1score.x( cP1StartingX - 10);
-	avg.p1score.y( cCanvasHeight / 2 - avg.p1score.getTextWidth()/2 );
-	avg.p1score.rotate(90);
 
-	avg.p2score = new Konva.Text({
+	agv = allGameVisuals.frontLayer; //-------------------------------------------------frontLayer
+
+	for(var i = 0; i < allPlayers.length; i++) {
+		agv[ ( "p"+(i+1)+"nameOutline" ) ] = new Konva.Text({
+			x: -100,
+			y: -100,
+			text: "P"+(i+1),
+			fontSize: 20,
+			fontFamily: 'Courier',
+			fill: 'black'
+		});
+		agv[ ( "p"+(i+1)+"name" ) ] = new Konva.Text({
+			x: -100,
+			y: -100,
+			text: "P"+(i+1),
+			fontSize: 20,
+			fontFamily: 'Courier',
+			fill: 'Green'
+		});
+		agv[ ( "p"+(i+1)+"scoreOutline" ) ] = new Konva.Text({
+			x: -100,
+			y: -100,
+			text: "P"+(i+1),
+			fontSize: 20,
+			fontFamily: 'Courier',
+			fill: 'black'
+		});
+		agv[ ( "p"+(i+1)+"scoreSub" ) ] = new Konva.Text({
+			x: -100,
+			y: -100,
+			text: "P"+(i+1),
+			fontSize: 20,
+			fontFamily: 'Courier',
+			fill: 'Green'
+		});
+	}
+
+
+	agv.p1score = new Konva.Text({
 		text: 'Score: 0',
-		fontSize: cP1StartingX - 20,
+		fontSize: 40,
 		fontFamily: 'Courier',
 		fill: 'green'
 	});
-	avg.p2score.x( cCanvasWidth - avg.p2score.getTextHeight() - 10 );
-	avg.p2score.y( cCanvasHeight / 2 + avg.p1score.getTextWidth()/2 );
-	avg.p2score.rotate(-90);
+	agv.p1score.x( agv.p1score.getTextHeight() + 10 );
+	agv.p1score.y( cCanvasHeight / 2 - agv.p1score.getTextWidth()/2 );
+	agv.p1score.rotate(90);
+
+	agv.p2score = new Konva.Text({
+		text: 'Score: 0',
+		fontSize: 40,
+		fontFamily: 'Courier',
+		fill: 'green'
+	});
+	agv.p2score.x( cCanvasWidth - agv.p2score.getTextHeight() - 10 );
+	agv.p2score.y( cCanvasHeight / 2 + agv.p1score.getTextWidth()/2 );
+	agv.p2score.rotate(-90);
 
 } //end setupGameVisuals
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

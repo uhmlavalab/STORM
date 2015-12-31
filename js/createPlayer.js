@@ -77,6 +77,11 @@ function createPlayer() {
     Overrides the death function on entity.
     */
 	ent.death = function () {
+		var exp = explosionFindFirstDead();
+		if(exp !== null) {
+			exp.spawnAt( this.x, this.y );
+		}
+
 		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
 		//remove sprite code here
@@ -130,7 +135,7 @@ function createPlayer() {
     	//parameters 		xspawn 	yspawn 	xdest 	ydest			
     	shotToUse.spawnAt( this.x, this.y, 	this.x, this.y - 1000, 	this.shotSpeed, 		allPlayers.indexOf(this), this.shotSize);
     	this.activeShots++;
-
+    	debugPrint("Player" + allPlayers.indexOf(this) + " activating shot", "player");
 
     } //end shootUpdate
 
@@ -154,6 +159,7 @@ function playerCreateVisual(ref){
 		width: allSpriteObjects['ac3'].width,
 		height: allSpriteObjects['ac3'].height
 	});
+	ref.vImage.rotate(90);
 	ref.vGroup.add(ref.vImage);
 
 	ref.width = allSpriteObjects['ac3'].width;

@@ -123,6 +123,7 @@ function createShot() {
 
     	//if a player shot makes contact with an 
     	if( belongToPlayer && tcwType === "invader" && areEntitiesTouching(this, thingCollidedWith) ) {
+    		thingCollidedWith.lastHitByPlayer = this.affliction; //set owner before damage, otherwise will be dead before refernce is set
     		thingCollidedWith.damage(1);
     		this.death();
     	}
