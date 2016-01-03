@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="favicon.ico">
+		<title>Main Page</title>
+	</head>
+	<!-- ===================================================================================================================== Body -->
+	<body onload="main()">
+
+
+		<div id='topdiv'> </div>
+		<div id='resultDiv'> </div>
+
+
+
+		<!-- JavaScript references placed at the end of the document so the pages load faster -->
+		<script type="text/javascript" src="../js/globals.js"></script>
+
+		<script type="text/javascript">
+
+		function main() {
+			var workingDiv;
+			var topdiv = document.getElementById("topdiv");
+				topdiv.style.border = "1px solid black";
+				topdiv.style.width = cCanvasWidth + "px";
+				topdiv.style.height = cCanvasHeight + "px";
+				topdiv.top = "10px";
+				topdiv.left = "10px";
+				topdiv.style.position = "absolute";
+
+
+			var wl = parseInt( cCanvasWidth / cEn1Width );
+			var hl = parseInt( cCanvasHeight / cEn1Width );
+			var divAdd = "";
+			for(var i = 0; i < wl; i++) {
+				for(var j = 0; j < hl; j++) {
+					divAdd += "<div id='block"+i+","+j+"'></div>\n";
+				}
+			}
+			topdiv.innerHTML = divAdd;
+
+
+			for(var x = 0; x < wl; x++) {
+				for(var y = 0; y < hl; y++) {
+					workingDiv = document.getElementById('block'+x + "," + y);
+					workingDiv.style.border = "1px solid black";
+					workingDiv.style.width = cEn1Width + "px";
+					workingDiv.style.height = cEn1Width + "px";
+					workingDiv.style.top = (-1 +  y * cEn1Width ) + "px";
+					workingDiv.style.left = (-1 + x * cEn1Width ) + "px";
+					// workingDiv.style.top = (-1 +  y * cEn1Width + ( y>0?-1:0 )) + "px";
+					// workingDiv.style.left = (-1 + x * cEn1Width + ( x>0?-1:0 )) + "px";
+					workingDiv.style.position = "absolute";
+					workingDiv.addEventListener('click', showDiv );
+				}
+			}
+
+			function showDiv(e) {
+				console.log( e.clientX);
+				console.log( e.clientY);
+				e.target.style.backgroundColor = "gray";
+			}
+
+
+		} // end main
+		</script>
+
+	</body>
+</html>

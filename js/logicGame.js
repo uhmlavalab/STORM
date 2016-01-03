@@ -11,14 +11,13 @@ function prepAndSwitchToGame(level) {
 	for ( var i = 0; i < allShots.length; i++) { allShots[i].death(); }
 	for ( var i = 0; i < allExplosions.length; i++) { allExplosions[i].death(); }
 
-	allPlayers[0].spawnAt( cCanvasWidth/5, cCanvasHeight - 100 );
-	allPlayers[1].spawnAt( cCanvasWidth/5 * 2, cCanvasHeight - 100 );
+	allPlayers[0].spawnAt( cCanvasWidth/10, cCanvasHeight/5 );
+	allPlayers[1].spawnAt( cCanvasWidth/10, cCanvasHeight/5 * 2 );
 
-	if(level === null) {
-		level = "L01";
+	if(level === undefined) {
+		level = Level01Commands;
 	}
-
-	//TODO process data for level loading.
+	commandProcessing.loadList(level);
 
 
 	placeScreenVisuals(allGameVisuals);
@@ -36,20 +35,24 @@ function inputGame() {
 	for(var i = 0; i < allPlayers.length; i++) {
 		allPlayers[i].moveDirection = "none";
 	}
-	if( keyboardKeys["w"] === "down" ) { allPlayers[0].moveDirection = "up"; }
-	else if( keyboardKeys["s"] === "down" ) { allPlayers[0].moveDirection = "down"; }
-	if( keyboardKeys["a"] === "down" ) { allPlayers[0].moveDirection += "left"; }
-	else if( keyboardKeys["d"] === "down" ) { allPlayers[0].moveDirection += "right"; }
 
+	for(var i = 0; i < allPlayers.length; i++) {
 
-	if( keyboardKeys["i"] === "down" ) { allPlayers[1].moveDirection = "up"; }
-	else if( keyboardKeys["k"] === "down" ) { allPlayers[1].moveDirection = "down"; }
-	if( keyboardKeys["j"] === "down" ) { allPlayers[1].moveDirection += "left"; }
-	else if( keyboardKeys["l"] === "down" ) { allPlayers[1].moveDirection += "right"; }
+		if(allPlayers[i].isAlive) {
+			if( isKeyboardKeyDown( playerControls[i].up ) ) { allPlayers[i].moveDirection = "up"; }
+			else if( isKeyboardKeyDown( playerControls[i].down ) ) { allPlayers[i].moveDirection = "down"; }
+			if( isKeyboardKeyDown( playerControls[i].left ) ) { allPlayers[i].moveDirection += "left"; }
+			else if( isKeyboardKeyDown( playerControls[i].right ) ) { allPlayers[i].moveDirection += "right"; }
 
-
-	if( keyboardKeys["c"] === "down" ) { keyboardKeys["c"] = "none"; allPlayers[0].tryShoot = true; }
-	if( keyboardKeys["n"] === "down" ) { keyboardKeys["n"] = "none"; allPlayers[1].tryShoot = true; }
+			if( isKeyboardKeyDown( playerControls[i].shoot )) {
+				keyboardKeys[ playerControls[i].shoot ] = "none";
+				allPlayers[i].tryShoot = true;
+			}
+		}
+		else if( allPlayers[i].readyToRespawn && isKeyboardKeyDown( playerControls[i].shoot ) ) {
+				allPlayers[i].respawn();
+		}
+	}
 
 } //inputGame
 
@@ -57,6 +60,9 @@ function inputGame() {
 Handles logic for game.
 */
 function logicGame() {
+
+	//process commands
+	commandProcessing.handleTimingOfCommands();
 
 	//update everything alive
 	for(var i = 0; i < allEntitiesToUpdate.length; i++) {
@@ -71,19 +77,5 @@ function logicGame() {
 		}
 	}
 
-	for( var i = 0; i < allPlayers.length; i++ ) {
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"nameOutline") ].x( allPlayers[i].x - 1 - allGameVisuals.frontLayer[ ("p"+(i+1)+"nameOutline") ].getTextWidth()/2 );
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"nameOutline") ].y( allPlayers[i].y + allPlayers[i].height/2 - 1);
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"name") ].x( allPlayers[i].x - allGameVisuals.frontLayer[ ("p"+(i+1)+"nameOutline") ].getTextWidth()/2 );
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"name") ].y( allPlayers[i].y + allPlayers[i].height/2 );
-
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreOutline") ].x( allPlayers[i].x - 1 - allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreOutline") ].getTextWidth()/2 );
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreOutline") ].y( allPlayers[i].y + allPlayers[i].height/2 - 1 + allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreOutline") ].getTextHeight() );
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreSub") ].x( allPlayers[i].x - allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreOutline") ].getTextWidth()/2 );
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreSub") ].y( allPlayers[i].y + allPlayers[i].height/2 + allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreOutline") ].getTextHeight() );
-
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreOutline") ].text("Score:"+allPlayers[i].score);
-		allGameVisuals.frontLayer[ ("p"+(i+1)+"scoreSub") ].text("Score:"+allPlayers[i].score);
-	}
 
 } //end logicGame

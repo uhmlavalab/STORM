@@ -213,7 +213,7 @@ function setupGameVisuals() {
 		createPlayer();
 		agv["player"+i] = allPlayers[i].vGroup;
 	}
-	for(var i = 0; i < 5; i++) {
+	for(var i = 0; i < 100; i++) {
 		createInvader();
 		agv["invader"+i] = allInvaders[i].vGroup;
 	}
@@ -235,61 +235,6 @@ function setupGameVisuals() {
 
 	agv = allGameVisuals.frontLayer; //-------------------------------------------------frontLayer
 
-	for(var i = 0; i < allPlayers.length; i++) {
-		agv[ ( "p"+(i+1)+"nameOutline" ) ] = new Konva.Text({
-			x: -100,
-			y: -100,
-			text: "P"+(i+1),
-			fontSize: 20,
-			fontFamily: 'Courier',
-			fill: 'black'
-		});
-		agv[ ( "p"+(i+1)+"name" ) ] = new Konva.Text({
-			x: -100,
-			y: -100,
-			text: "P"+(i+1),
-			fontSize: 20,
-			fontFamily: 'Courier',
-			fill: 'Green'
-		});
-		agv[ ( "p"+(i+1)+"scoreOutline" ) ] = new Konva.Text({
-			x: -100,
-			y: -100,
-			text: "P"+(i+1),
-			fontSize: 20,
-			fontFamily: 'Courier',
-			fill: 'black'
-		});
-		agv[ ( "p"+(i+1)+"scoreSub" ) ] = new Konva.Text({
-			x: -100,
-			y: -100,
-			text: "P"+(i+1),
-			fontSize: 20,
-			fontFamily: 'Courier',
-			fill: 'Green'
-		});
-	}
-
-
-	agv.p1score = new Konva.Text({
-		text: 'Score: 0',
-		fontSize: 40,
-		fontFamily: 'Courier',
-		fill: 'green'
-	});
-	agv.p1score.x( agv.p1score.getTextHeight() + 10 );
-	agv.p1score.y( cCanvasHeight / 2 - agv.p1score.getTextWidth()/2 );
-	agv.p1score.rotate(90);
-
-	agv.p2score = new Konva.Text({
-		text: 'Score: 0',
-		fontSize: 40,
-		fontFamily: 'Courier',
-		fill: 'green'
-	});
-	agv.p2score.x( cCanvasWidth - agv.p2score.getTextHeight() - 10 );
-	agv.p2score.y( cCanvasHeight / 2 + agv.p1score.getTextWidth()/2 );
-	agv.p2score.rotate(-90);
 
 } //end setupGameVisuals
 

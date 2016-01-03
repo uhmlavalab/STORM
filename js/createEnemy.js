@@ -98,7 +98,7 @@ function createInvader() {
 
 		//score credit the player
 		console.log("Death by damage:" + deathByDamage + ". And player ref: " + this.lastHitByPlayer );
-		if(deathByDamage !== null && deathByDamage && this.lastHitByPlayer !== -1) {
+		if(deathByDamage !== undefined && deathByDamage && this.lastHitByPlayer !== -1) {
 			allPlayers[ this.lastHitByPlayer ].score++;
 			console.log("credit score");
 		}

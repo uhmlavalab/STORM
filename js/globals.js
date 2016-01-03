@@ -42,12 +42,51 @@ var cCanvasWidth			= 1535; //TODO fix me, this needs to be a different value for
 var cCanvasHeight 			= 860;
 var cPiOver180 				= Math.PI / 180;
 var c180OverPi 				= 180 / Math.PI;
+var cEn1Width				= 32;
 
 //gameState tracking
 var gameState 		= "none";
 var	gsTest	 		= "test";
 var	gsMenu	 		= "menu";
 var gsGame 			= "game";
+
+
+//controls
+var playerControls = [
+	//p1
+	{
+		"up":"w",
+		"down":"s",
+		"left":"a",
+		"right":"d",
+		"shoot":"e"
+	},
+	//p2
+	{
+		"up":"i",
+		"down":"k",
+		"left":"j",
+		"right":"l",
+		"shoot":"u"
+	},
+	//p3
+	{
+		"up":"",
+		"down":"",
+		"left":"",
+		"right":"",
+		"shoot":""
+	},
+	//p4
+	{
+		"up":"",
+		"down":"",
+		"left":"",
+		"right":"",
+		"shoot":""
+	}
+];
+
 
 
 //-----------------------------------------------------------------------------------------------------------Debug
@@ -84,6 +123,23 @@ function consolePrint(stringToPrint, exit) {
 	console.log(stringToPrint);
 	if( exit === "exit" ) { throw new Error("Something went badly wrong!"); }
 }
+
+/**
+Check keyboardKeys if a key is down.
+*/
+function isKeyboardKeyDown( objectAttribute ) {
+	if ( keyboardKeys[objectAttribute] === 'down') { return true; }
+	return false;
+}
+
+/**
+Check keyboardKeys if a key is up.
+*/
+function isKeyboardKeyUp( objectAttribute ) {
+	if ( keyboardKeys[objectAttribute] === 'up') { return true; }
+	return false;
+}
+
 
 /**
 Must be derived from the createEntity class to get the correct getEncompassingRectangle function.

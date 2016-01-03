@@ -27,7 +27,7 @@ function inputMenu() {
 		}
 	}
 
-	if(keyboardKeys["Enter"] === 'down') {
+	if( isKeyboardKeyDown('13') || isKeyboardKeyDown('Enter') ) {
 		prepAndSwitchToGame();
 	}
 
