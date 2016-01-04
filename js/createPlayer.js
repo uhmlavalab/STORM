@@ -226,7 +226,7 @@ function playerCreateVisual(ref){
 		text: "P"+(allPlayers.length + 1), //this is possible because player hasn't yet been added to allPlayer array yet
 		fontSize: 20,
 		fontFamily: 'Courier',
-		fill: 'black'
+		fill: 'white'
 	}); 
 	ref.vNameOutLine.x( -1 * ref.vNameOutLine.getTextWidth()/2 -1 );
 	ref.vNameOutLine.y( ref.height/2 + 4 );
@@ -246,7 +246,7 @@ function playerCreateVisual(ref){
 		text: "Score: 0",
 		fontSize: 20,
 		fontFamily: 'Courier',
-		fill: 'black'
+		fill: 'white'
 	});
 	ref.vScore = new Konva.Text({
 		x: -100,

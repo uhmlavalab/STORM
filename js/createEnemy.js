@@ -97,10 +97,9 @@ function createInvader() {
 		}
 
 		//score credit the player
-		console.log("Death by damage:" + deathByDamage + ". And player ref: " + this.lastHitByPlayer );
 		if(deathByDamage !== undefined && deathByDamage && this.lastHitByPlayer !== -1) {
 			allPlayers[ this.lastHitByPlayer ].score++;
-			console.log("credit score");
+			debugPrint("Score++ to p" + (this.lastHitByPlayer + 1) , "enemy" );
 		}
 		ent.lastHitByPlayer = -1;
 
@@ -242,8 +241,8 @@ function createInvader() {
     			py = allPlayers[rp].y;
     		}
     		else {
-    			px = cCanvasWidth/2;
-    			py = cCanvasHeight;
+    			px = 0;
+    			py = cCanvasHeight/2;
     		}
 
 

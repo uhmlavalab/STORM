@@ -13,7 +13,7 @@ function main() {
 	setupKonvaCanvas();
 	setupSpriteImageObjects();
 
-	// stupidCookies();
+	stupidCookies();
 
 	setupMenuVisuals();
 	setupGameVisuals();
@@ -95,21 +95,56 @@ function mouseBinder() {
 function handleMouseMove(event) { mouseKeys.x = event.clientX; mouseKeys.y = event.clientY; }
 
 function stupidCookies() {
-	var arrCook = document.cookie.split(';');
-	var temp;
+	var allCookies = document.cookie;
+	consolePrint("Cookie contents:" + allCookies +".");
+	allCookies = allCookies.split(";")
 
-	for(var i = 0; i < arrCook.length; i++) {
-		temp = arrCook[i].trim().split('=');
-		console.log( 'cookie name[' + temp[0] +']' + 'cookie value[' + temp[1] +']' );
-
-		if( temp[0].indexOf('name1') > -1 ) { leaderBoard[0].name = temp[1]; if(temp[0].length < 3) {leaderBoard[0].name = 'AAA';} console.log('n1'); }
-		if( temp[0].indexOf('name2') > -1 ) { leaderBoard[1].name = temp[1]; if(temp[0].length < 3) {leaderBoard[1].name = 'AAA';} console.log('n2');}
-		if( temp[0].indexOf('name3') > -1 ) { leaderBoard[2].name = temp[1]; if(temp[0].length < 3) {leaderBoard[2].name = 'AAA';} console.log('n3');}
-		if( temp[0].indexOf('score1') > -1 ) { leaderBoard[0].score = temp[1];  console.log('s1');}
-		if( temp[0].indexOf('score2') > -1 ) { leaderBoard[1].score = temp[1];  console.log('s2');}
-		if( temp[0].indexOf('score3') > -1 ) { leaderBoard[2].score = temp[1];  console.log('s3');}
+	if(
+		getCookieStringGivenKey("name1") === null
+		|| getCookieStringGivenKey("name2") === null
+		|| getCookieStringGivenKey("name3") === null
+		|| getCookieStringGivenKey("score1") === null
+		|| getCookieStringGivenKey("score2") === null
+		|| getCookieStringGivenKey("score3") === null
+		) {
+		document.cookie = "name1=AAA";
+		highScores.name1 = "AAA";
+		document.cookie = "name2=AAA";
+		highScores.name2 = "AAA";
+		document.cookie = "name3=AAA";
+		highScores.name3 = "AAA";
+		document.cookie = "score1=0";
+		highScores.score1 = 0;
+		document.cookie = "score2=0";
+		highScores.score2 = 0;
+		document.cookie = "score3=0";
+		highScores.score3 = 0;
+		allCookies = document.cookie;
+		consolePrint("Seeding with initial AAA contents:" + allCookies +".");
+		allCookies = allCookies.split(";")
 	}
+	else {
+		highScores.name1 = getCookieStringGivenKey("name1");
+		highScores.name2 = getCookieStringGivenKey("name2");
+		highScores.name3 = getCookieStringGivenKey("name3");
+		highScores.score1 = parseInt( getCookieStringGivenKey("score1") );
+		highScores.score2 = parseInt( getCookieStringGivenKey("score2") );
+		highScores.score3 = parseInt( getCookieStringGivenKey("score3") );
+	}
+}
 
+function getCookieStringGivenKey( keyString ) {
+	var allCookies = document.cookie;
+	if( allCookies.indexOf(keyString) !== -1 ) {
+		allCookies = allCookies.substring( allCookies.indexOf(keyString) );
+		allCookies = allCookies.substring( allCookies.indexOf('=') + 1 );
+
+		if(allCookies.indexOf(';') !== -1) {
+			allCookies = allCookies.substring( 0, allCookies.indexOf(';') );
+		}
+		return allCookies;
+	}
+	return null;
 }
 
 

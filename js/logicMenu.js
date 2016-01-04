@@ -7,7 +7,10 @@ function prepAndSwitchToMenu() {
 	gameState = gsMenu;
 	stageTimeStart = Date.now();
 
-	//TODO load scores.
+	//show highScores
+	allMenuVisuals.midLayer.topScore1.text( highScores.name1 + " " + highScores.score1 );
+	allMenuVisuals.midLayer.topScore2.text( highScores.name2 + " " + highScores.score2 );
+	allMenuVisuals.midLayer.topScore3.text( highScores.name3 + " " + highScores.score3 );
 
 	placeScreenVisuals(allMenuVisuals);
 

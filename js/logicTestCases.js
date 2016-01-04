@@ -112,6 +112,7 @@ function logicTest() {
 
 function prepTestImageSwitching() {
 	allTestVisuals = {};
+	allTestVisuals.bgLayer = {};
 	allTestVisuals.backLayer = {};
 	allTestVisuals.midLayer = {};
 	allTestVisuals.frontLayer = {};
@@ -148,6 +149,7 @@ function logicTestImageSwitching() {
 
 function prepTestCommandSpawn() {
 	allTestVisuals = {};
+	allTestVisuals.bgLayer = {};
 	allTestVisuals.backLayer = {};
 	allTestVisuals.midLayer = {};
 	allTestVisuals.frontLayer = {};
@@ -185,6 +187,7 @@ function logicTestCommandSpawn() {
 
 function prepTestCommandMove() {
 	allTestVisuals = {};
+	allTestVisuals.bgLayer = {};
 	allTestVisuals.backLayer = {};
 	allTestVisuals.midLayer = {};
 	allTestVisuals.frontLayer = {};
@@ -223,6 +226,7 @@ function logicTestCommandMove() {
 
 function prepTestShotCreation() {
 	allTestVisuals = {};
+	allTestVisuals.bgLayer = {};
 	allTestVisuals.backLayer = {};
 	allTestVisuals.midLayer = {};
 	allTestVisuals.frontLayer = {};
@@ -312,6 +316,7 @@ function logicTestShotCreation() {
 
 function prepTestPlayerControl() {
 	allTestVisuals = {};
+	allTestVisuals.bgLayer = {};
 	allTestVisuals.backLayer = {};
 	allTestVisuals.midLayer = {};
 	allTestVisuals.frontLayer = {};
@@ -368,6 +373,7 @@ function logicTestPlayerControl() {
 
 function prepTestShotCollision() {
 	allTestVisuals = {};
+	allTestVisuals.bgLayer = {};
 	allTestVisuals.backLayer = {};
 	allTestVisuals.midLayer = {};
 	allTestVisuals.frontLayer = {};

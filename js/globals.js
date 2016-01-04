@@ -20,6 +20,14 @@ var allPlayers 		= [];
 var allExplosions 	= [];
 var allEntitiesToUpdate = []; //an experiment with self accounting entities.
 
+//state vars
+var testVars 		= {}; //TODO states should be their own objects (OO-structures).
+var menuVars 		= {};
+var gameVars 		= {};
+	gameVars.goSpeed = 1;
+var resultVars 		= {};
+
+
 //time variables
 var stageTimeStart	= 0;
 var stageTime		= 0;
@@ -29,26 +37,35 @@ var dTime 			= 0;
 var allTestVisuals;
 var allMenuVisuals;
 var allGameVisuals;
+var allResultVisuals;
+var bgLayer;
+var backLayer;
+var midLayer;
+var frontLayer;
 
 //input related
 var keyboardKeys 	= {};
 var mouseKeys 		= {};
 
+//highScore object
+var highScores 		= {};
 
 //-----------------------------------------------------------------------------------------------------------Constants
 //all constants prefixed with c
 var cMainUpdaterInterval 	= 10; //milliseconds.
-var cCanvasWidth			= 1535; //TODO fix me, this needs to be a different value for the sake of consistency
-var cCanvasHeight 			= 860;
+var cCanvasWidth			= 1535;//1535; //TODO fix me, this needs to be a different value for the sake of consistency
+var cCanvasHeight 			= 860; //860;
 var cPiOver180 				= Math.PI / 180;
 var c180OverPi 				= 180 / Math.PI;
 var cEn1Width				= 32;
+var cBgStarMoveSpeed 		= 0.5;
 
 //gameState tracking
 var gameState 		= "none";
 var	gsTest	 		= "test";
 var	gsMenu	 		= "menu";
 var gsGame 			= "game";
+var gsResult		= "game";
 
 
 //controls
@@ -59,7 +76,13 @@ var playerControls = [
 		"down":"s",
 		"left":"a",
 		"right":"d",
-		"shoot":"e"
+		"shoot":"e",
+
+		"gc_up":"w",
+		"gc_down":"s",
+		"gc_left":"a",
+		"gc_right":"d",
+		"gc_shoot":"e"
 	},
 	//p2
 	{
@@ -67,7 +90,13 @@ var playerControls = [
 		"down":"k",
 		"left":"j",
 		"right":"l",
-		"shoot":"u"
+		"shoot":"u",
+
+		"gc_up":"w",
+		"gc_down":"s",
+		"gc_left":"a",
+		"gc_right":"d",
+		"gc_shoot":"e"
 	},
 	//p3
 	{
@@ -75,7 +104,13 @@ var playerControls = [
 		"down":"",
 		"left":"",
 		"right":"",
-		"shoot":""
+		"shoot":"",
+
+		"gc_up":"w",
+		"gc_down":"s",
+		"gc_left":"a",
+		"gc_right":"d",
+		"gc_shoot":"e"
 	},
 	//p4
 	{
@@ -83,7 +118,13 @@ var playerControls = [
 		"down":"",
 		"left":"",
 		"right":"",
-		"shoot":""
+		"shoot":"",
+
+		"gc_up":"w",
+		"gc_down":"s",
+		"gc_left":"a",
+		"gc_right":"d",
+		"gc_shoot":"e"
 	}
 ];
 

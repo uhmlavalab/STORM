@@ -38,6 +38,9 @@ function setupKonvaCanvas() {
 	});
 	grayBacking.add(grayback);
 
+	bgLayer = new Konva.Layer();
+	stage.add(bgLayer);
+
 	backLayer = new Konva.Layer();
 	stage.add(backLayer);
 
@@ -58,12 +61,15 @@ Doing this saves time and memory.
 function setupSpriteImageObjects() {
 	allSpriteObjects = {};
 
+	//aircraft
 	allSpriteObjects['ac1'] = new Image();
 	allSpriteObjects['ac1'].src = 'assets/aircraft_1.png';
 	allSpriteObjects['ac2'] = new Image();
 	allSpriteObjects['ac2'].src = 'assets/aircraft_2.png';
+	// allSpriteObjects['ac3'] = new Image();
+	// allSpriteObjects['ac3'].src = 'assets/aircraft_3.png';
 	allSpriteObjects['ac3'] = new Image();
-	allSpriteObjects['ac3'].src = 'assets/aircraft_3.png';
+	allSpriteObjects['ac3'].src = 'assets/aircraft_3_outline.png';
 	allSpriteObjects['ac4'] = new Image();
 	allSpriteObjects['ac4'].src = 'assets/aircraft_4.png';
 	allSpriteObjects['ac5'] = new Image();
@@ -71,6 +77,7 @@ function setupSpriteImageObjects() {
 	allSpriteObjects['ac6'] = new Image();
 	allSpriteObjects['ac6'].src = 'assets/aircraft_6.png';
 
+	//enemy
 	allSpriteObjects['en1'] = new Image();
 	allSpriteObjects['en1'].src = 'assets/enemy_1.png';
 	allSpriteObjects['en2'] = new Image();
@@ -78,13 +85,34 @@ function setupSpriteImageObjects() {
 	allSpriteObjects['en3'] = new Image();
 	allSpriteObjects['en3'].src = 'assets/enemy_3.png';
 
+	//shot
 	allSpriteObjects['shot'] = new Image();
 	allSpriteObjects['shot'].src = 'assets/shoot_simple.png';
 
+	//explosion
 	allSpriteObjects['explode1'] = new Image();
 	allSpriteObjects['explode1'].src = 'assets/explosion_1.png';
 	allSpriteObjects['explode2'] = new Image();
 	allSpriteObjects['explode2'].src = 'assets/explosion_2.png';
+
+	//background
+	allSpriteObjects['hole'] = new Image();
+	allSpriteObjects['hole'].src = 'assets/hole.png';
+	allSpriteObjects['planet1'] = new Image();
+	allSpriteObjects['planet1'].src = 'assets/planet_1.png';
+	allSpriteObjects['planet2'] = new Image();
+	allSpriteObjects['planet2'].src = 'assets/planet_2.png';
+	allSpriteObjects['planet3'] = new Image();
+	allSpriteObjects['planet3'].src = 'assets/planet_3.png';
+	allSpriteObjects['stars1'] = new Image();
+	allSpriteObjects['stars1'].src = 'assets/stars.png';
+	allSpriteObjects['stars2'] = new Image();
+	allSpriteObjects['stars2'].src = 'assets/stars_2.png';
+	allSpriteObjects['stars3'] = new Image();
+	allSpriteObjects['stars3'].src = 'assets/stars_3.png';
+
+	allSpriteObjects['gameover'] = new Image();
+	allSpriteObjects['gameover'].src = 'assets/gameover.png';
 
 
 
@@ -108,9 +136,10 @@ Creates all visuals to be used in the menu gameState.
 function setupMenuVisuals() {
 
 	allMenuVisuals = {};
-	allMenuVisuals.backLayer = {};
-	allMenuVisuals.midLayer = {};
-	allMenuVisuals.frontLayer = {};
+	allMenuVisuals.bgLayer 		= {};
+	allMenuVisuals.backLayer 	= {};
+	allMenuVisuals.midLayer 	= {};
+	allMenuVisuals.frontLayer 	= {};
 
 	var amv = allMenuVisuals.midLayer;
 
@@ -194,19 +223,126 @@ function setupGameVisuals() {
 
 
 	allGameVisuals = {};
-	allGameVisuals.backLayer = {};
-	allGameVisuals.midLayer = {};
-	allGameVisuals.frontLayer = {};
+	allGameVisuals.bgLayer 		= {};
+	allGameVisuals.backLayer 	= {};
+	allGameVisuals.midLayer 	= {};
+	allGameVisuals.frontLayer 	= {};
 
-	var agv = allGameVisuals.backLayer; //-------------------------------------------------backlayer
+
+	var agv = allGameVisuals.bgLayer; //-------------------------------------------------backlayer
 
 	agv.blackBackdrop = new Konva.Rect({
 		x:0,
 		y:0,
 		width:cCanvasWidth,
 		height:cCanvasHeight,
-		fill: 'darkgray'
+		fill: 'black'
 	});
+
+	agv.s1 = new Konva.Image({
+		x: allSpriteObjects['stars1'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars1'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	agv.s2 = new Konva.Image({
+		x: allSpriteObjects['stars2'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars2'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	agv.s3 = new Konva.Image({
+		x: allSpriteObjects['stars3'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars3'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+
+	var temp;
+	agv.hole = new Konva.Group();
+	temp	= new Konva.Image({
+		x: -1 * allSpriteObjects['hole'].width/2,
+		y: -1 * allSpriteObjects['hole'].height/2,
+		image: allSpriteObjects['hole'],
+		width: allSpriteObjects['hole'].width,
+		height: allSpriteObjects['hole'].height
+	});
+	agv.hole.add(temp);
+	agv.p1 = new Konva.Group();
+	temp = new Konva.Image({
+		x: -1 * allSpriteObjects['planet1'].width/2,
+		y: -1 * allSpriteObjects['planet1'].height/2,
+		image: allSpriteObjects['planet1'],
+		width: allSpriteObjects['planet1'].width,
+		height: allSpriteObjects['planet1'].height
+	});
+	agv.p1.add(temp);
+	agv.p2 = new Konva.Group();
+	temp = new Konva.Image({
+		x: -1 * allSpriteObjects['planet2'].width/2,
+		y: -1 * allSpriteObjects['planet2'].height/2,
+		image: allSpriteObjects['planet2'],
+		width: allSpriteObjects['planet2'].width,
+		height: allSpriteObjects['planet2'].height
+	});
+	agv.p2.add(temp);
+	agv.p3 = new Konva.Group();
+	temp = new Konva.Image({
+		x: allSpriteObjects['planet3'].width/2,
+		y: -1 * allSpriteObjects['planet3'].height/2,
+		image: allSpriteObjects['planet3'],
+		width: allSpriteObjects['planet3'].width,
+		height: allSpriteObjects['planet3'].height
+	});
+	agv.p3.add(temp);
+
+	/*
+	//preserved in case need to recover original references.
+	agv.hole = new Konva.Layer();
+	agv.holeImage	= new Konva.Image({
+		x: -1 * allSpriteObjects['hole'].width/2,
+		y: -1 * allSpriteObjects['hole'].height/2,
+		image: allSpriteObjects['hole'],
+		width: allSpriteObjects['hole'].width,
+		height: allSpriteObjects['hole'].height
+	});
+	agv.hole.add(agv.holeImage);
+	agv.p1 = new Konva.Layer();
+	agv.p1Image = new Konva.Image({
+		x: -1 * allSpriteObjects['planet1'].width/2,
+		y: -1 * allSpriteObjects['planet1'].height/2,
+		image: allSpriteObjects['planet1'],
+		width: allSpriteObjects['planet1'].width,
+		height: allSpriteObjects['planet1'].height
+	});
+	agv.p1.add(agv.p1Image);
+	agv.p2 = new Konva.Layer();
+	agv.p2Image = new Konva.Image({
+		x: -1 * allSpriteObjects['planet2'].width/2,
+		y: -1 * allSpriteObjects['planet2'].height/2,
+		image: allSpriteObjects['planet2'],
+		width: allSpriteObjects['planet2'].width,
+		height: allSpriteObjects['planet2'].height
+	});
+	agv.p2.add(agv.p2Image);
+	agv.p3 = new Konva.Layer();
+	agv.p3Image = new Konva.Image({
+		x: allSpriteObjects['planet3'].width/2,
+		y: -1 * allSpriteObjects['planet3'].height/2,
+		image: allSpriteObjects['planet3'],
+		width: allSpriteObjects['planet3'].width,
+		height: allSpriteObjects['planet3'].height
+	});
+	agv.p3.add(agv.p2Image);
+	*/
+
+
+
+	agv = allGameVisuals.backLayer; //-------------------------------------------------backlayer
+
 	//create the players, invaders, and shots in the back layer
 
 	for(var i = 0; i < 4; i++) {
@@ -235,36 +371,16 @@ function setupGameVisuals() {
 
 	agv = allGameVisuals.frontLayer; //-------------------------------------------------frontLayer
 
+	agv.gameover = new Konva.Image({
+		x:  cCanvasWidth/2 - allSpriteObjects['gameover'].width/2,
+		y: -1 *  allSpriteObjects['gameover'].height,
+		image: allSpriteObjects['gameover'],
+		width: allSpriteObjects['gameover'].width,
+		height: allSpriteObjects['gameover'].height
+	});
+
 
 } //end setupGameVisuals
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -292,8 +408,9 @@ Creates all visuals to be used in the result gameState.
 function setupResultVisuals() {
 
 	allResultVisuals = {};
-	allResultVisuals.backLayer = {};
-	allResultVisuals.midLayer = {};
+	allResultVisuals.bgLayer 	= {};
+	allResultVisuals.backLayer 	= {};
+	allResultVisuals.midLayer 	= {};
 	allResultVisuals.frontLayer = {};
 
 	var arv = allResultVisuals.midLayer;
@@ -419,6 +536,10 @@ function placeScreenVisuals( allScreenVisuals ) {
 	removeAllChildrenFromLayers();
 
 	if(debug) { console.log('---adding screen visuals--------------------------------------------------------------------'); }
+	for ( var key in allScreenVisuals.bgLayer ) {
+		if(debug) { console.log( 'adding visual: ' + key ); }
+		bgLayer.add( allScreenVisuals.bgLayer[key] );
+	}
 	for ( var key in allScreenVisuals.backLayer ) {
 		if(debug) { console.log( 'adding visual: ' + key ); }
 		backLayer.add( allScreenVisuals.backLayer[key] );
@@ -438,6 +559,7 @@ function placeScreenVisuals( allScreenVisuals ) {
 //------------------------------------------------------------------------------------------------------
 
 function removeAllChildrenFromLayers() {
+	bgLayer.removeChildren();
 	backLayer.removeChildren();
 	midLayer.removeChildren();
 	frontLayer.removeChildren();
