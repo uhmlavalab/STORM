@@ -159,8 +159,8 @@ function createPlayer() {
     	var ry = this.vScore.y() - 100;
     	this.spawnAt( rx, ry );
 
-    	score -= 10;
-    	if(score < 0) { score = 0; }
+    	this.score -= 10;
+    	if(this.score < 0) { this.score = 0; }
 
     };
 

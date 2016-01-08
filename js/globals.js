@@ -26,6 +26,8 @@ var menuVars 		= {};
 var gameVars 		= {};
 	gameVars.goSpeed = 1;
 var resultVars 		= {};
+	resultVars.blinkCounter;
+	resultVars.blinkDuration;
 
 
 //time variables
@@ -65,7 +67,7 @@ var gameState 		= "none";
 var	gsTest	 		= "test";
 var	gsMenu	 		= "menu";
 var gsGame 			= "game";
-var gsResult		= "game";
+var gsResult		= "result";
 
 
 //controls

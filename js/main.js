@@ -17,7 +17,7 @@ function main() {
 
 	setupMenuVisuals();
 	setupGameVisuals();
-	// setupResultVisuals();
+	setupResultVisuals();
 
 
 
@@ -54,16 +54,17 @@ function mainUpdater() {
 			inputGame();
 			logicGame();
 			break;
-		// case gsResult:
-		// 	inputResult();
-		// 	logicResult();
-		// 	break;
+		case gsResult:
+			inputResult();
+			logicResult();
+			break;
 		default:
 			consolePrint('Error: unknown game state:' + gameState, "exit");
 			break;
 	}
 	//update time;
 	dTime = Date.now() - stageTimeStart - stageTime;
+	if(dTime < 0) { dTime = 0; }
 	stageTime = Date.now() - stageTimeStart;
 	stage.draw();
 } //end mainUpdater

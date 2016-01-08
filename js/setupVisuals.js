@@ -415,109 +415,74 @@ function setupResultVisuals() {
 
 	var arv = allResultVisuals.midLayer;
 
-	arv.player1Title = new Konva.Text({
-		text: 'Player 1',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.player1Title.x( cCanvasWidth/4 - arv.player1Title.getTextWidth()/2 );
-	arv.player1Title.y( cCanvasHeight * 0.1 );
+	for(var i=0; i < allPlayers.length; i++) {
+		arv = allResultVisuals.midLayer;
+		//make their marker
+		arv["player" + (i+1) + "Title"] = new Konva.Text({
+			text: 'Player ' + (i+1),
+			fontSize: 30,
+			fontFamily: 'Arial',
+			fill: 'green'
+		});
+		arv["player" + (i+1) + "Title"].x( cCanvasWidth/2 - arv["player" + (i+1) + "Title"].getTextWidth() * 1.5 );
+		arv["player" + (i+1) + "Title"].y( cCanvasHeight/4 + ( 2 * i * arv["player" + (i+1) + "Title"].getTextHeight()) );
+		//make char 1
+		arv["player" + (i+1) + "c1"] =   new Konva.Text({
+			text: 'A',
+			fontSize: 30,
+			fontFamily: 'Arial',
+			fill: 'green'
+		});
+		arv["player" + (i+1) + "c1"].x( cCanvasWidth/2);
+		arv["player" + (i+1) + "c1"] .y( arv["player" + (i+1) + "Title"].y() );
+		//make char 2
+		arv["player" + (i+1) + "c2"] =   new Konva.Text({
+			text: 'A',
+			fontSize: 30,
+			fontFamily: 'Arial',
+			fill: 'green'
+		});
+		arv["player" + (i+1) + "c2"].x( cCanvasWidth/2 + arv["player" + (i+1) + "c2"].getTextWidth() );
+		arv["player" + (i+1) + "c2"] .y( arv["player" + (i+1) + "Title"].y() );
+		//make char 3
+		arv["player" + (i+1) + "c3"] =   new Konva.Text({
+			text: 'A',
+			fontSize: 30,
+			fontFamily: 'Arial',
+			fill: 'green'
+		});
+		arv["player" + (i+1) + "c3"].x( cCanvasWidth/2 + 2 * arv["player" + (i+1) + "c3"].getTextWidth() );
+		arv["player" + (i+1) + "c3"] .y( arv["player" + (i+1) + "Title"].y() );
+		//make score 
+		arv["player" + (i+1) + "score"] =   new Konva.Text({
+			text: 'Score:',
+			fontSize: 30,
+			fontFamily: 'Arial',
+			fill: 'green'
+		});
+		arv["player" + (i+1) + "score"].x( cCanvasWidth/2 + 5 * arv["player" + (i+1) + "c3"].getTextWidth() );
+		arv["player" + (i+1) + "score"] .y( arv["player" + (i+1) + "Title"].y() );
+		
+		//add the green block
+		arv = allResultVisuals.frontLayer;
+		arv["player" + (i+1) + "block"] = new Konva.Rect({
+			x: allResultVisuals.midLayer["player" + (i+1) + "c1"].x(),
+			y: allResultVisuals.midLayer["player" + (i+1) + "c1"].y(),
+			width: allResultVisuals.midLayer["player" + (i+1) + "c1"].getTextWidth(),
+			height: allResultVisuals.midLayer["player" + (i+1) + "c1"].getTextHeight(),
+			fill: 'green'
+		});
 
-	arv.p1c1 =  new Konva.Text({
-		text: 'A',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.p1c1.x( cCanvasWidth/4 - arv.p1c1.getTextWidth()/2 - arv.p1c1.getTextWidth() );
-	arv.p1c1.y( cCanvasHeight / 2 );
+	} //end for each player
 
-	arv.p1c2 =  new Konva.Text({
-		text: 'A',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.p1c2.x( cCanvasWidth/4 - arv.p1c2.getTextWidth()/2 );
-	arv.p1c2.y( cCanvasHeight / 2 );
-
-	arv.p1c3 =  new Konva.Text({
-		text: 'A',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.p1c3.x( cCanvasWidth/4 - arv.p1c3.getTextWidth()/2 + arv.p1c3.getTextWidth() );
-	arv.p1c3.y( cCanvasHeight / 2 );
-
-
-
-	arv.player2Title = new Konva.Text({
-		text: 'Player 2',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.player2Title.x( cCanvasWidth/4 * 3  - arv.player2Title.getTextWidth()/2 );
-	arv.player2Title.y( cCanvasHeight * 0.1 );
-
-	arv.p2c1 =  new Konva.Text({
-		text: 'A',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.p2c1.x( cCanvasWidth/4 * 3 - arv.p2c1.getTextWidth()/2 - arv.p2c1.getTextWidth() );
-	arv.p2c1.y( cCanvasHeight / 2 );
-
-	arv.p2c2 =  new Konva.Text({
-		text: 'A',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.p2c2.x( cCanvasWidth/4 * 3 - arv.p2c2.getTextWidth()/2 );
-	arv.p2c2.y( cCanvasHeight / 2 );
-
-	arv.p2c3 =  new Konva.Text({
-		text: 'A',
-		fontSize: 30,
-		fontFamily: 'Arial',
-		fill: 'green'
-	});
-	arv.p2c3.x( cCanvasWidth/4 * 3 - arv.p2c3.getTextWidth()/2 + arv.p2c3.getTextWidth() );
-	arv.p2c3.y( cCanvasHeight / 2 );
-
-
-
-	var arv = allResultVisuals.frontLayer;
-
-	arv.p1block = new Konva.Rect({
-		x: allResultVisuals.midLayer.p1c1.x(),
-		y: allResultVisuals.midLayer.p1c1.y(),
-		width: allResultVisuals.midLayer.p1c1.getTextWidth(),
-		height: allResultVisuals.midLayer.p1c1.getTextHeight(),
-		fill: 'green'
-	});
-
-	arv.p2block = new Konva.Rect({
-		x: allResultVisuals.midLayer.p2c1.x(),
-		y: allResultVisuals.midLayer.p2c1.y(),
-		width: allResultVisuals.midLayer.p2c1.getTextWidth(),
-		height: allResultVisuals.midLayer.p2c1.getTextHeight(),
-		fill: 'green'
-	});
-    
    allResultVisuals.midLayer.winner = new Konva.Text({
-        text: 'Testing',
+        text: 'Input your names, press Enter when done',
 		fontSize: 30,
 		fontFamily: 'Arial',
 		fill: 'green'
     });
-    
     allResultVisuals.midLayer.winner.x( cCanvasWidth/2 - allResultVisuals.midLayer.winner.getTextWidth()/2 );
-    allResultVisuals.midLayer.winner.y( cCanvasHeight/4 - allResultVisuals.midLayer.winner.getTextHeight()/2);
+    allResultVisuals.midLayer.winner.y( cCanvasHeight/5 - allResultVisuals.midLayer.winner.getTextHeight()/2);
 
 } //end setupResultVisuals
 
