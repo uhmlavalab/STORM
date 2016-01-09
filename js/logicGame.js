@@ -14,6 +14,11 @@ function prepAndSwitchToGame(level) {
 	//spawn two players
 	allPlayers[0].spawnAt( cCanvasWidth/10, cCanvasHeight/5 );
 	allPlayers[1].spawnAt( cCanvasWidth/10, cCanvasHeight/5 * 2 );
+	//spawn and immediately kill p3 and 4 to allow possible join in.
+	allPlayers[2].spawnAt( -100, -100 );
+	allPlayers[3].spawnAt( -100, -100 );
+	allPlayers[2].death();
+	allPlayers[3].death();
 	//randomize background.
 	var rx, ry, vis, s1, s2, s3;
 	for(var i = 0; i < 4; i++) {
@@ -44,7 +49,7 @@ function prepAndSwitchToGame(level) {
 	allGameVisuals.bgLayer['s3'].x( cCanvasWidth * s3 );
 	//reset the game over
 	allGameVisuals.frontLayer.gameover.y( -1 * allGameVisuals.frontLayer.gameover.height() );
-	gameVars.canRespawn = true;
+	gameVars.atLeastOnePlayerAlive = true;
 
 	//load levels
 	if(level === undefined) {
@@ -71,24 +76,53 @@ function inputGame() {
 	}
 
 	for(var i = 0; i < allPlayers.length; i++) {
-
+		//if alive then, check for control input
 		if(allPlayers[i].isAlive) {
-			if( isKeyboardKeyDown( playerControls[i].up ) ) { allPlayers[i].moveDirection = "up"; }
-			else if( isKeyboardKeyDown( playerControls[i].down ) ) { allPlayers[i].moveDirection = "down"; }
-			if( isKeyboardKeyDown( playerControls[i].left ) ) { allPlayers[i].moveDirection += "left"; }
-			else if( isKeyboardKeyDown( playerControls[i].right ) ) { allPlayers[i].moveDirection += "right"; }
+			//check for the directional movement
+			if 	( 
+				isKeyboardKeyDown( playerControls[i].up )
+				|| isKeyboardKeyDown( playerControls[i].gc_up )
+				 )
+			{ allPlayers[i].moveDirection = "up"; }
+			else if (
+					isKeyboardKeyDown( playerControls[i].down )
+					|| isKeyboardKeyDown( playerControls[i].gc_down )
+					)
+			{ allPlayers[i].moveDirection = "down"; }
+			if 	( isKeyboardKeyDown( playerControls[i].left )
+				|| isKeyboardKeyDown( playerControls[i].gc_left )
+				)
+			{ allPlayers[i].moveDirection += "left"; }
+			else if (
+					isKeyboardKeyDown( playerControls[i].right )
+					|| isKeyboardKeyDown( playerControls[i].gc_right )
+					)
+			{ allPlayers[i].moveDirection += "right"; }
 
+			//check for shoot input
 			if( isKeyboardKeyDown( playerControls[i].shoot )) {
 				keyboardKeys[ playerControls[i].shoot ] = "none";
 				allPlayers[i].tryShoot = true;
 			}
-		}
-		else if( gameVars.canRespawn && allPlayers[i].readyToRespawn && isKeyboardKeyDown( playerControls[i].shoot ) ) {
-				allPlayers[i].respawn();
-		}
-	}
+			//check for shoot input from gc
+			if( isKeyboardKeyDown( playerControls[i].gc_shoot )) {
+				keyboardKeys[ playerControls[i].gc_shoot ] = "none";
+				allPlayers[i].tryShoot = true;
+			}
 
-	if( !gameVars.canRespawn && keyboardKeys["Enter"] === "down" ) {
+		} //end if alive
+		//check for respawn
+		else if
+			(
+			gameVars.atLeastOnePlayerAlive
+			&& allPlayers[i].readyToRespawn
+			&& ( isKeyboardKeyDown( playerControls[i].shoot ) || isKeyboardKeyDown( playerControls[i].gc_shoot ) )
+			)
+		{ allPlayers[i].respawn(); } //end else if dead
+	} //end for all players
+
+	//
+	if( !gameVars.atLeastOnePlayerAlive && keyboardKeys["Enter"] === "down" ) {
 		keyboardKeys["Enter"] = 'none';
 		prepAndSwitchToResult();
 	}
@@ -124,12 +158,12 @@ function logicGame() {
 	allGameVisuals.bgLayer.hole.rotate(0.01);
 	
 	//check for gameover
-	if( gameVars.canRespawn) {
+	if( gameVars.atLeastOnePlayerAlive) {
 		var allDead = true;
 		for(var i = 0; i < allPlayers.length; i++) {
 			if(allPlayers[i].isAlive) { allDead = false; break;}
 		}
-		if(allDead) { gameVars.canRespawn = false; }
+		if(allDead) { gameVars.atLeastOnePlayerAlive = false; }
 	}
 	//see if need to move the sign
 	else if ( allGameVisuals.frontLayer.gameover.y() < cCanvasHeight/5 * 2) {

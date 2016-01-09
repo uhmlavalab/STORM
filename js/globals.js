@@ -94,39 +94,39 @@ var playerControls = [
 		"right":"l",
 		"shoot":"u",
 
-		"gc_up":"w",
-		"gc_down":"s",
-		"gc_left":"a",
-		"gc_right":"d",
-		"gc_shoot":"e"
+		"gc_up":"i",
+		"gc_down":"k",
+		"gc_left":"j",
+		"gc_right":"l",
+		"gc_shoot":"u"
 	},
 	//p3
 	{
-		"up":"",
-		"down":"",
-		"left":"",
-		"right":"",
-		"shoot":"",
+		"up":"5",
+		"down":"t",
+		"left":"r",
+		"right":"y",
+		"shoot":"6",
 
-		"gc_up":"w",
-		"gc_down":"s",
-		"gc_left":"a",
-		"gc_right":"d",
-		"gc_shoot":"e"
+		"gc_up":"5",
+		"gc_down":"t",
+		"gc_left":"r",
+		"gc_right":"y",
+		"gc_shoot":"6"
 	},
 	//p4
 	{
-		"up":"",
-		"down":"",
-		"left":"",
-		"right":"",
-		"shoot":"",
+		"up":"h",
+		"down":"n",
+		"left":"b",
+		"right":"m",
+		"shoot":"g",
 
-		"gc_up":"w",
-		"gc_down":"s",
-		"gc_left":"a",
-		"gc_right":"d",
-		"gc_shoot":"e"
+		"gc_up":"h",
+		"gc_down":"n",
+		"gc_left":"b",
+		"gc_right":"m",
+		"gc_shoot":"g"
 	}
 ];
 
