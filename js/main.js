@@ -108,18 +108,19 @@ function stupidCookies() {
 		|| getCookieStringGivenKey("score2") === null
 		|| getCookieStringGivenKey("score3") === null
 		) {
-		document.cookie = "name1=AAA";
 		highScores.name1 = "AAA";
-		document.cookie = "name2=AAA";
+		document.cookie = "name1=AAA";
 		highScores.name2 = "AAA";
-		document.cookie = "name3=AAA";
+		document.cookie = "name2=AAA";
 		highScores.name3 = "AAA";
-		document.cookie = "score1=0";
+		document.cookie = "name3=AAA";
+		
 		highScores.score1 = 0;
-		document.cookie = "score2=0";
+		document.cookie = "score1=0";
 		highScores.score2 = 0;
-		document.cookie = "score3=0";
+		document.cookie = "score2=0";
 		highScores.score3 = 0;
+		document.cookie = "score3=0";
 		allCookies = document.cookie;
 		consolePrint("Seeding with initial AAA contents:" + allCookies +".");
 		allCookies = allCookies.split(";")

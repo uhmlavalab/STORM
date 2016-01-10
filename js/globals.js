@@ -50,7 +50,13 @@ var keyboardKeys 	= {};
 var mouseKeys 		= {};
 
 //highScore object
-var highScores 		= {};
+var highScores 		= { };
+	highScores.name1;
+	highScores.name2;
+	highScores.name3;
+	highScores.score1;
+	highScores.score2;
+	highScores.score3;
 
 //-----------------------------------------------------------------------------------------------------------Constants
 //all constants prefixed with c

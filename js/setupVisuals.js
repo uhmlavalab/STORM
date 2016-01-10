@@ -34,7 +34,7 @@ function setupKonvaCanvas() {
 		y:0,
 		width:cCanvasWidth,
 		height:cCanvasHeight,
-		fill: 'lightgray'
+		fill: 'black'
 	});
 	grayBacking.add(grayback);
 
@@ -141,10 +141,62 @@ function setupMenuVisuals() {
 	allMenuVisuals.midLayer 	= {};
 	allMenuVisuals.frontLayer 	= {};
 
-	var amv = allMenuVisuals.midLayer;
+	var amv = allMenuVisuals.bgLayer;
+
+	amv.s1 = new Konva.Image({
+		x: allSpriteObjects['stars1'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars1'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	amv.s2 = new Konva.Image({
+		x: allSpriteObjects['stars2'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars2'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	amv.s3 = new Konva.Image({
+		x: allSpriteObjects['stars3'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars3'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	var temp;
+	amv.p1 = new Konva.Group();
+	temp = new Konva.Image({
+		x: -1 * allSpriteObjects['planet1'].width/2,
+		y: -1 * allSpriteObjects['planet1'].height/2,
+		image: allSpriteObjects['planet1'],
+		width: allSpriteObjects['planet1'].width,
+		height: allSpriteObjects['planet1'].height
+	});
+	amv.p1.add(temp);
+	amv.p2 = new Konva.Group();
+	temp = new Konva.Image({
+		x: -1 * allSpriteObjects['planet2'].width/2,
+		y: -1 * allSpriteObjects['planet2'].height/2,
+		image: allSpriteObjects['planet2'],
+		width: allSpriteObjects['planet2'].width,
+		height: allSpriteObjects['planet2'].height
+	});
+	amv.p2.add(temp);
+	amv.p3 = new Konva.Group();
+	temp = new Konva.Image({
+		x: allSpriteObjects['planet3'].width/2,
+		y: -1 * allSpriteObjects['planet3'].height/2,
+		image: allSpriteObjects['planet3'],
+		width: allSpriteObjects['planet3'].width,
+		height: allSpriteObjects['planet3'].height
+	});
+	amv.p3.add(temp);
+
+	amv = allMenuVisuals.midLayer;
 
 	amv.title = new Konva.Text({
-		text: 'SIEGE',
+		text: 'STORM',
 		fontSize: cCanvasHeight * 0.15,
 		fontFamily: 'Arial',
 		fill: 'green'
@@ -413,7 +465,61 @@ function setupResultVisuals() {
 	allResultVisuals.midLayer 	= {};
 	allResultVisuals.frontLayer = {};
 
-	var arv = allResultVisuals.midLayer;
+	var arv = allResultVisuals.bgLayer;
+
+	arv.s1 = new Konva.Image({
+		x: allSpriteObjects['stars1'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars1'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	arv.s2 = new Konva.Image({
+		x: allSpriteObjects['stars2'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars2'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	arv.s3 = new Konva.Image({
+		x: allSpriteObjects['stars3'].width/2,
+		y: 0,
+		image: allSpriteObjects['stars3'],
+		width: cCanvasWidth,
+		height: cCanvasHeight
+	});
+	var temp;
+	arv.p1 = new Konva.Group();
+	temp = new Konva.Image({
+		x: -1 * allSpriteObjects['planet1'].width/2,
+		y: -1 * allSpriteObjects['planet1'].height/2,
+		image: allSpriteObjects['planet1'],
+		width: allSpriteObjects['planet1'].width,
+		height: allSpriteObjects['planet1'].height
+	});
+	arv.p1.add(temp);
+	arv.p2 = new Konva.Group();
+	temp = new Konva.Image({
+		x: -1 * allSpriteObjects['planet2'].width/2,
+		y: -1 * allSpriteObjects['planet2'].height/2,
+		image: allSpriteObjects['planet2'],
+		width: allSpriteObjects['planet2'].width,
+		height: allSpriteObjects['planet2'].height
+	});
+	arv.p2.add(temp);
+	arv.p3 = new Konva.Group();
+	temp = new Konva.Image({
+		x: allSpriteObjects['planet3'].width/2,
+		y: -1 * allSpriteObjects['planet3'].height/2,
+		image: allSpriteObjects['planet3'],
+		width: allSpriteObjects['planet3'].width,
+		height: allSpriteObjects['planet3'].height
+	});
+	arv.p3.add(temp);
+
+
+
+	arv = allResultVisuals.midLayer;
 
 	for(var i=0; i < allPlayers.length; i++) {
 		arv = allResultVisuals.midLayer;
