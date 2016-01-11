@@ -401,11 +401,11 @@ function setupGameVisuals() {
 		createPlayer();
 		agv["player"+i] = allPlayers[i].vGroup;
 	}
-	for(var i = 0; i < 100; i++) {
+	for(var i = 0; i < cGameEnemyLimit; i++) {
 		createInvader();
 		agv["invader"+i] = allInvaders[i].vGroup;
 	}
-	for(var i = 0; i < 100; i++) {
+	for(var i = 0; i < cGameShotLimit; i++) {
 		createShot();
 		agv["shot"+i] = allShots[i].vGroup;
 	}
@@ -413,7 +413,7 @@ function setupGameVisuals() {
 	agv = allGameVisuals.midLayer; //-------------------------------------------------midlayer
 
 	//make explosions in the back layer (unsure if ok here)
-	for(var i = 0; i < 20; i++) {
+	for(var i = 0; i < cGameExplosionLimit; i++) {
 		createExplosion();
 		agv["explosion"+i] = allExplosions[i].vGroup;
 		allExplosions[i].death();

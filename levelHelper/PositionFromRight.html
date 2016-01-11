@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="icon" href="favicon.ico">
+		<title>Main Page</title>
+	</head>
+	<!-- ===================================================================================================================== Body -->
+	<body onload="main()">
+
+
+		<div id='topdiv'> </div>
+		<div id='resultDiv'> </div>
+
+
+
+		<!-- JavaScript references placed at the end of the document so the pages load faster -->
+		<script type="text/javascript" src="../js/globals.js"></script>
+
+		<script type="text/javascript">
+		function main() {
+			generateIntroText();
+		}
+
+
+		function generateIntroText() {
+			var topdiv = document.getElementById("topdiv");
+			var contents = "";
+
+
+			for(var i = 0; i < introTextPositions.length; i++) {
+				var lineSplit = introTextPositions[i].split("\t");
+
+				for(var ls = 0; ls < lineSplit.length; ls++) {
+					if ( lineSplit[ls].indexOf("a") !== -1 ) {
+						//spawn location based upon text format
+						contents += "\"100 &#09; | spawn &#09; | "
+							// right edge - (cEn1Width [size of enemy] with a buffer of 1 unit from the right)
+							+ (cCanvasWidth - ( cEn1Width * ( 1 + lineSplit.length - ls ) ) )
+							+ " &#09; | "
+							+ ( cCanvasHeight + (cEn1Width * i) )
+							+ " &#09; | visual:en3,hp:1\",<br>";
+						//move like a text scroll upwards
+						contents += "\"7000 &#09; | moveToBy &#09; |"
+							+ (cCanvasWidth - ( cEn1Width * ( 1 + lineSplit.length - ls ) ) )
+							+ " &#09; | "
+							+ ( cCanvasHeight + (cEn1Width * i) - ( (introTextPositions.length + 3  ) * 2 * cEn1Width) )
+							+ "\",<br>";
+						//cleanup
+						contents += "\"7100 &#09; | dieAt\",<br>";
+					}
+				}
+			}
+
+			topdiv.innerHTML = contents;
+
+
+		} // end main
+		</script>
+
+
+		<script type="text/javascript">
+
+
+
+var introTextPositions = [
+"a				a		a	a		a			a	a		a	a	a			a		a			a	a",
+"a				a		a			a			a			a		a		a		a		a		a	",
+"a				a		a	a		a			a			a		a		a				a		a	a",
+"a		a		a		a			a			a			a		a		a				a		a	",
+"	a		a			a	a		a	a		a	a		a	a	a		a				a		a	a",
+"																										",
+"										a	a	a		a	a	a										",
+"											a			a		a										",
+"											a			a		a										",
+"											a			a		a										",
+"											a			a	a	a										",
+"																										",
+"			a	a		a	a	a		a	a	a		a	a	a				a		a				",
+"			a				a			a		a		a		a			a		a		a			",
+"			a	a			a			a		a		a	a				a				a			",
+"				a			a			a		a		a		a			a				a			",
+"			a	a			a			a	a	a		a			a		a				a			",
+"																										",
+"a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a	a",
+"																										",
+"		a	a		a	a	a			a			a	a	a	a		a	a				a			",
+"		a				a			a		a		a					a				a	a			",
+"		a	a			a			a	a	a		a		a	a		a	a				a			",
+"			a			a			a		a		a			a		a					a			",
+"	a	a			a			a		a		a	a	a	a		a	a			a	a	a	"
+		];
+		</script>
+
+	</body>
+</html>
