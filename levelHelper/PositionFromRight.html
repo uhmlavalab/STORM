@@ -19,8 +19,60 @@
 
 		<script type="text/javascript">
 		function main() {
-			generateIntroText();
+			generateSpaceInvaderFormation();
 		}
+
+		function generateSpaceInvaderFormation() {
+			var topdiv = document.getElementById("topdiv");
+			var contents = "";
+
+			var formationWidth = 11;
+			var formationHeight = 9;
+			var startSpawnInvTime = 7200;
+			var spawnIncrement = 50;
+			var spawnMoveToFormationTime = 600;
+
+			var startMoveInvTime = 1500 + startSpawnInvTime;
+			var moveDelayTime = 500;
+
+			var xFormationStart;
+			var yFormationStart;
+
+			for ( var w = 0; w < formationWidth; w++ ) {
+				for ( var h = 0; h < formationHeight; h++ ) {
+					//first spawn just off screen, but move to formation
+					xFormationStart = (cCanvasWidth - (formationWidth * cEn1Width * 2) + (2 * cEn1Width * w));
+					yFormationStart = (cEn1Width + cEn1Width * 2 * h);
+					contents += "\"" + (startSpawnInvTime + (w * formationHeight + h))
+						+ "&#09; | spawn &#09; |"
+						+ (cCanvasWidth + cEn1Width) //x
+						+ "&#09; |"
+						+ yFormationStart //y
+						+ "&#09; | visual:en3,hp:1\",<br>";
+					//then move
+					contents += "\"" + (startSpawnInvTime + (w * formationHeight + h) + spawnMoveToFormationTime)
+						+ "&#09; | moveToBy &#09; | "
+						+ xFormationStart //x
+						+ "&#09; |"
+						+ yFormationStart //y
+						+ "\",<br>";
+					//cause down movement
+					for(var i = 0; i < 4; i++) {
+						contents += "\"" + (startMoveInvTime + (i * moveDelayTime))
+							+ " &#09; | haltUntil\",<br>";
+						contents += "\"" + (startMoveInvTime + (i * moveDelayTime))
+							+ "&#09; | moveToBy &#09; | "
+							+ xFormationStart //x
+							+ "&#09; |"
+							+ (yFormationStart + cEn1Width * 2 * (i + 1)) //y
+							+ "\",<br>";
+					} //end causing down movement
+				} //end for height
+			} //end for width;
+
+			topdiv.innerHTML = contents;
+
+		} //end
 
 
 		function generateIntroText() {
