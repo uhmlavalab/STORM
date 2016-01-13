@@ -19,10 +19,147 @@
 
 		<script type="text/javascript">
 		function main() {
-			generateSpaceInvaderFormation();
+			generateStartOfVarDeclare();
+
+			generateIntroText();
+			var endOfP1 = generateP1SiFormation();
+
+
+			generateEndBrace();
 		}
 
-		function generateSpaceInvaderFormation() {
+		function generateP2Snaking( endOfP1 ) {
+			var topdiv = document.getElementById("topdiv");
+			var contents = "";
+			var timePhase2Start = 33950;
+			if ( endOfP1 !== undefined && endOfP1 !== null ) {
+				timePhase2Start = endOfP1;
+			}
+
+		} //end generateP2Snaking
+
+
+		/**
+
+		*/
+		function addMoveCommandsGivenSnakeWaypoints( contents, smda ) {
+			for ( var i = 0; i < smda.length; i++ ) {
+				contents += "\"" + smda[i].time 
+					+ "&#09; | moveToBy &#09; |";
+					+ (smda[i].x)
+					+ "&#09; | ";
+					+ (smda[i].y) + "\",<br>";
+			}
+			return contents;
+		} 
+
+		/**
+		xStart 				usually will start on right side of screen
+		yStart
+		widthWaveDirection	since start on right, should be negative
+		numberOfWaves
+		heightOfWaves
+		pohStraightWay		how much of the height should be straight travel
+		timeStart 			game time to start at
+		timeToCompleteWave  duration to complete the wave in.
+
+		returns an array of objects (x,y,time)	
+		*/
+		function getWaypointsForSnaking( xStart, yStart, widthWaveDirection, numberOfWaves, heightOfWaves, pohStraightWay, timeStart, timeToCompleteWave  ) {
+			//x distance markers
+			var oneWaveDistance 	= widthWaveDirection / numberOfWaves;
+			var halfWaveOpposite 	= oneWaveDistance / 2;
+			var quarterWave		 	= halfWaveOpposite / 2;
+			var oneSixthHalfWave 	= quarterWave / 3;
+			//ydistance markers
+			var straightWayDistance = heightOfWaves * pohStraightWay;
+			var peakCurveDistance 	= (heightOfWaves - straightWayDistance) /2;
+			
+			//fuck the even speed calculation
+			//somehow it came to 10 points.
+			//+2 for the additional time for straightway.
+			var timePerPoint 		= timeToCompleteWave / numberOfWaves / 12;
+
+			var xWaveStart, yWaveStart, timeWaveStart;
+			var moveDataBlocks = [];
+			var mdb;
+
+
+			//generate one whole wave, numberOfWaves times.
+			//assume already at xStart,yStart
+			xWaveStart = xStart;
+			yWaveStart = yStart;
+			for ( var i = 0; i < numberOfWaves; i++ ) {
+				//first generate the rest of the peak
+				mdb = {};
+				mdb.x = xWaveStart + oneSixthHalfWave;
+				mdb.y = yWaveStart;
+				mdb.time = timeWaveStart + ( timePerPoint );
+				moveDataBlocks.push(mdb);
+				//generate angle point
+				mdb = {};
+				mdb.x = xWaveStart + oneSixthHalfWave * 2;
+				mdb.y = yWaveStart + peakCurveDistance;
+				mdb.time = timeWaveStart + ( timePerPoint * 2 );
+				moveDataBlocks.push(mdb);
+				//generate first straight way
+				mdb = {};
+				mdb.x = xWaveStart + oneSixthHalfWave * 4;
+				mdb.y = yWaveStart + peakCurveDistance + straightWayDistance;
+				mdb.time = timeWaveStart + ( timePerPoint * 4 );
+				moveDataBlocks.push(mdb);
+				//curve of opposite peak
+				mdb = {};
+				mdb.x = xWaveStart + halfWaveOpposite - oneSixthHalfWave;
+				mdb.y = yWaveStart + heightOfWaves;
+				mdb.time = timeWaveStart + ( timePerPoint * 5 );
+				moveDataBlocks.push(mdb);
+				//opposite peak
+				mdb = {};
+				mdb.x = xWaveStart + halfWaveOpposite;
+				mdb.y = yWaveStart + heightOfWaves;
+				mdb.time = timeWaveStart + ( timePerPoint * 6 );
+				moveDataBlocks.push(mdb);
+				//opposite peak return curve start
+				mdb = {};
+				mdb.x = xWaveStart + halfWaveOpposite + oneSixthHalfWave;
+				mdb.y = yWaveStart + heightOfWaves;
+				mdb.time = timeWaveStart + ( timePerPoint * 7 );
+				moveDataBlocks.push(mdb);
+				//opposite peak curve
+				mdb = {};
+				mdb.x = xWaveStart + halfWaveOpposite + oneSixthHalfWave * 2;
+				mdb.y = yWaveStart + heightOfWaves - peakCurveDistance;
+				mdb.time = timeWaveStart + ( timePerPoint * 8 );
+				moveDataBlocks.push(mdb);
+				//return straightway
+				mdb = {};
+				mdb.x = xWaveStart + oneWaveDistance - oneSixthHalfWave * 2;
+				mdb.y = yWaveStart + peakCurveDistance;
+				mdb.time = timeWaveStart + ( timePerPoint * 10 );
+				moveDataBlocks.push(mdb);
+				//return curve
+				mdb = {};
+				mdb.x = xWaveStart + oneWaveDistance - oneSixthHalfWave;
+				mdb.y = yWaveStart;
+				mdb.time = timeWaveStart + ( timePerPoint * 11 );
+				moveDataBlocks.push(mdb);
+				//full return, start of next point
+				mdb = {};
+				mdb.x = xWaveStart + oneWaveDistance;
+				mdb.y = yWaveStart;
+				mdb.time = timeWaveStart + ( timePerPoint * 12 );
+				moveDataBlocks.push(mdb);
+
+				xWaveStart += oneWaveDistance;
+				timeWaveStart += timePerPoint * 12;
+			}
+
+			return moveDataBlocks;
+
+		} //end getWaypointsForSnaking
+
+		function generateP1SiFormation() {
 			var topdiv = document.getElementById("topdiv");
 			var contents = "";
 
@@ -30,49 +167,143 @@
 			var formationHeight = 9;
 			var startSpawnInvTime = 7200;
 			var spawnIncrement = 50;
-			var spawnMoveToFormationTime = 600;
+			var spawnMoveToFormationTime = 300;
 
-			var startMoveInvTime = 1500 + startSpawnInvTime;
-			var moveDelayTime = 500;
+			var moveDelayTime = 700; //used to calculate the startMoveInvTime
+			var moveTime = 300;
+			var startMoveInvTime = startSpawnInvTime + moveDelayTime + ( spawnIncrement * formationWidth * formationHeight ) + spawnMoveToFormationTime;
+			var movePixelAmount = cEn1Width * 2;
+			var moveCycles = 4;
 
 			var xFormationStart;
 			var yFormationStart;
+			var timeReference;
+			var lastDeathTime;
 
 			for ( var w = 0; w < formationWidth; w++ ) {
 				for ( var h = 0; h < formationHeight; h++ ) {
 					//first spawn just off screen, but move to formation
-					xFormationStart = (cCanvasWidth - (formationWidth * cEn1Width * 2) + (2 * cEn1Width * w));
-					yFormationStart = (cEn1Width + cEn1Width * 2 * h);
-					contents += "\"" + (startSpawnInvTime + (w * formationHeight + h))
+					xFormationStart = (cCanvasWidth - (formationWidth * movePixelAmount) + (2 * cEn1Width * w));
+					yFormationStart = (cEn1Width + movePixelAmount * h);
+					//determine spawn time.
+					timeReference = ( startSpawnInvTime + spawnIncrement * (w * formationHeight + h) );
+					//spawn
+					contents += "\"" + ( timeReference )
 						+ "&#09; | spawn &#09; |"
 						+ (cCanvasWidth + cEn1Width) //x
 						+ "&#09; |"
 						+ yFormationStart //y
 						+ "&#09; | visual:en3,hp:1\",<br>";
 					//then move
-					contents += "\"" + (startSpawnInvTime + (w * formationHeight + h) + spawnMoveToFormationTime)
+					contents += "\"" + ( timeReference + spawnMoveToFormationTime)
 						+ "&#09; | moveToBy &#09; | "
 						+ xFormationStart //x
 						+ "&#09; |"
 						+ yFormationStart //y
 						+ "\",<br>";
 					//cause down movement
-					for(var i = 0; i < 4; i++) {
-						contents += "\"" + (startMoveInvTime + (i * moveDelayTime))
+					contents = moveVertical( contents, moveCycles, startMoveInvTime, moveDelayTime, moveTime, xFormationStart, yFormationStart, movePixelAmount );
+					//reset time counter to after completed first down
+					timeReference = startMoveInvTime + ( moveCycles * moveDelayTime );
+					timeReference += moveDelayTime; //because move left;
+					xFormationStart -= movePixelAmount;
+					yFormationStart += movePixelAmount * moveCycles;
+					//move left 1
+					contents += "\"" + ( timeReference )
+						+ " &#09; | haltUntil\",<br>";
+					contents += "\"" + ( timeReference + moveTime )
+						+ "&#09; | moveToBy &#09; | "
+						+ xFormationStart //x
+						+ "&#09; |"
+						+ yFormationStart //y
+						+ "\",<br>";
+					//update time reference.
+					timeReference += moveTime;
+					//move up 
+					contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, -movePixelAmount );
+					//reset counters
+					timeReference = timeReference + ( moveCycles * moveDelayTime );
+					timeReference += moveDelayTime; //delay before moving left;
+					xFormationStart -= movePixelAmount;
+					yFormationStart -= movePixelAmount * moveCycles;
+					//move left 2
+					contents += "\"" + ( timeReference )
+						+ " &#09; | haltUntil\",<br>";
+					contents += "\"" + ( timeReference + moveTime )
+						+ "&#09; | moveToBy &#09; | "
+						+ xFormationStart //x
+						+ "&#09; |"
+						+ yFormationStart //y
+						+ "\",<br>";
+					//update time reference.
+					timeReference += moveTime;
+					//move down
+					contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, movePixelAmount );
+					//reset counters
+					timeReference = timeReference + ( moveCycles * moveDelayTime );
+					timeReference += moveDelayTime; //delay before moving left;
+					xFormationStart -= movePixelAmount;
+					yFormationStart += movePixelAmount * moveCycles;
+					//move left
+					contents += "\"" + ( timeReference )
+						+ " &#09; | haltUntil\",<br>";
+					contents += "\"" + ( timeReference + moveTime )
+						+ "&#09; | moveToBy &#09; | "
+						+ xFormationStart //x
+						+ "&#09; |"
+						+ yFormationStart //y
+						+ "\",<br>";
+					//update time reference.
+					timeReference += moveTime;
+					//move up
+					contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, -movePixelAmount );
+
+					//now get them off screen.
+
+					//reset counters
+					timeReference = timeReference + moveTime + ( moveCycles * moveDelayTime );
+					yFormationStart -= movePixelAmount * moveCycles;
+					//add an additional amount of upward movements until off screen.
+					//                    \/
+					var jumpsToLeave = h + 1;
+					for ( var i = 0; i < jumpsToLeave; i++ ) {
+						contents += "\"" + (timeReference + (i * moveDelayTime))
 							+ " &#09; | haltUntil\",<br>";
-						contents += "\"" + (startMoveInvTime + (i * moveDelayTime))
+						contents += "\"" + (timeReference + moveTime +  (i * moveDelayTime))
 							+ "&#09; | moveToBy &#09; | "
 							+ xFormationStart //x
 							+ "&#09; |"
-							+ (yFormationStart + cEn1Width * 2 * (i + 1)) //y
+							+ (yFormationStart - movePixelAmount * (i + 1)) //y
 							+ "\",<br>";
-					} //end causing down movement
+					}
+					contents += "\"" + (timeReference + (jumpsToLeave * moveDelayTime)) 
+						+ "&#09; | dieAt\",<br>";
+					lastDeathTime = (timeReference + (jumpsToLeave * moveDelayTime));
+
+
 				} //end for height
 			} //end for width;
 
-			topdiv.innerHTML = contents;
+			topdiv.innerHTML += contents;
 
-		} //end
+			return lastDeathTime;
+
+		} //end generateP1SiFormation
+
+		function moveVertical(contents, moveCycles, startMoveInvTime, moveDelayTime, moveTime, xFormationStart, yFormationStart, movePixelAmount) {
+			for(var i = 0; i < moveCycles; i++) {
+				contents += "\"" + (startMoveInvTime + (i * moveDelayTime))
+					+ " &#09; | haltUntil\",<br>";
+				contents += "\"" + (startMoveInvTime + moveTime +  (i * moveDelayTime))
+					+ "&#09; | moveToBy &#09; | "
+					+ xFormationStart //x
+					+ "&#09; |"
+					+ (yFormationStart + movePixelAmount * (i + 1)) //y
+					+ "\",<br>";
+			} //end moving up
+
+			return contents;
+		} //end moveVertical
 
 
 		function generateIntroText() {
@@ -104,10 +335,26 @@
 				}
 			}
 
+			topdiv.innerHTML += contents;
+
+
+		} // end generateIntroText
+
+		function generateStartOfVarDeclare() {
+			var topdiv = document.getElementById("topdiv");
+			var contents = "";
+				contents += "<br>";
+				contents += "var Level01Commands = [<br>";
+				contents += "\"Commands must have a minimum of one separator. This will differentiate between comments, blank lines, etc.	\",<br>";
 			topdiv.innerHTML = contents;
+		}
 
+		function generateEndBrace() {
+			var topdiv = document.getElementById("topdiv");
+			var contents = "<br>];";
+			topdiv.innerHTML += contents;
+		}
 
-		} // end main
 		</script>
 
 
