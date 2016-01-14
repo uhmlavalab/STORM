@@ -21,13 +21,19 @@
 		function main() {
 			generateStartOfVarDeclare();
 
-			generateIntroText();
-			var endOfP1 = generateP1SiFormation();
-
+			// generateIntroText();
+			// var endOfP1 = generateP1SiFormation();
+			// generateP2Snaking(endOfP1);
+			generateP2Snaking(2000);
 
 			generateEndBrace();
 		}
 
+		/**
+		=============================================================================
+		=============================================================================
+		=============================================================================
+		*/
 		function generateP2Snaking( endOfP1 ) {
 			var topdiv = document.getElementById("topdiv");
 			var contents = "";
@@ -36,22 +42,202 @@
 				timePhase2Start = endOfP1;
 			}
 
+			var numberOfWaves = 3;
+			var heightOfWaves = cCanvasHeight * 0.20;
+			var percentOfHeightStraightWay = 0.7;
+			var timeToCompleteWave = 5000;
+			var streamSize = 7;
+			var streamStartTime = timePhase2Start;
+			var streamSpawnDelay = 100;
+			//crossstream delay to after the initial stream
+			var streamCrossDelayedTime = 0;
+
+			//stream down from middle
+			contents += getEntriesForStream(
+							streamSize,
+							streamStartTime,
+							streamSpawnDelay,
+							cCanvasWidth,			//xStart
+							cCanvasHeight/2,		//yStart
+							-cCanvasWidth,			//widthWaveDirection
+							numberOfWaves,
+							heightOfWaves,
+							percentOfHeightStraightWay,
+							timeToCompleteWave  );
+			//stream up from middle
+			contents += getEntriesForStream(
+							streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves,
+							-heightOfWaves, 		//changed the height
+							percentOfHeightStraightWay, timeToCompleteWave  );
+
+			//delayed cross path
+
+			//crossing path for bottom stream
+			contents += getEntriesForStream(
+							streamSize,
+							streamStartTime, //changed
+							streamSpawnDelay, cCanvasWidth,
+							cCanvasHeight/2 + heightOfWaves, //changed yStart
+							-cCanvasWidth, numberOfWaves,
+							-heightOfWaves, 		//changed the height
+							percentOfHeightStraightWay, timeToCompleteWave  );
+			//crossing path for bottom stream
+			contents += getEntriesForStream(
+							streamSize,
+							streamStartTime, //changed
+							streamSpawnDelay, cCanvasWidth,
+							cCanvasHeight/2 - heightOfWaves, //changed yStart
+							-cCanvasWidth, numberOfWaves,
+							heightOfWaves, 		//changed the height
+							percentOfHeightStraightWay, timeToCompleteWave  );
+
+			//delay by until after first stream wave
+			streamStartTime += timeToCompleteWave;
+
+			//bottom cross
+			contents += getEntriesForStream(
+							streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
+							cCanvasHeight/2 + heightOfWaves, //changed yStart
+							-cCanvasWidth, numberOfWaves,
+							heightOfWaves, 		//changed the height
+							percentOfHeightStraightWay, timeToCompleteWave  );
+			contents += getEntriesForStream(
+							streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
+							cCanvasHeight/2 + heightOfWaves*2, //changed yStart
+							-cCanvasWidth, numberOfWaves,
+							-heightOfWaves, 		//changed the height
+							percentOfHeightStraightWay, timeToCompleteWave  );
+			//top cross
+			contents += getEntriesForStream(
+							streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
+							cCanvasHeight/2 - heightOfWaves, //changed yStart
+							-cCanvasWidth, numberOfWaves,
+							-heightOfWaves, 		//changed the height
+							percentOfHeightStraightWay, timeToCompleteWave  );
+			contents += getEntriesForStream(
+							streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
+							cCanvasHeight/2 - heightOfWaves*2, //changed yStart
+							-cCanvasWidth, numberOfWaves,
+							heightOfWaves, 		//changed the height
+							percentOfHeightStraightWay, timeToCompleteWave  );
+
+			//delay by until after second stream wave
+			streamStartTime += timeToCompleteWave;
+			streamSize = 2;
+
+			//switch to two pair cross
+
+			//top cross
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves*2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//half delay
+			streamStartTime += timeToCompleteWave/2;
+			//middle upper
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//half delay
+			streamStartTime += timeToCompleteWave/2;
+			//middle lower
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//half delay
+			streamStartTime += timeToCompleteWave/2;
+			//bottom cross
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves*2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			topdiv.innerHTML += contents;
 		} //end generateP2Snaking
 
+		function getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, xStart, yStart, widthWaveDirection, numberOfWaves, heightOfWaves, pohStraightWay, timeToCompleteWave  ) {
+			var entry = "";
+			var moveOffScreenTime = 500;
+			var startTime;
+
+			for(var i = 0; i < streamSize; i++) {
+				//spawn
+				startTime = streamStartTime + (i * streamSpawnDelay);
+				entry += returnSpawnEntry(
+							startTime,
+							xStart, yStart );
+				//get waypoints
+				var waypoints = getWaypointsForSnaking(
+									xStart, yStart,
+									widthWaveDirection,
+									numberOfWaves,
+									heightOfWaves,
+									pohStraightWay, 
+									startTime,
+									timeToCompleteWave
+									);
+				//generate the move commands
+				entry = addMoveCommandsGivenSnakeWaypoints( entry, waypoints);
+				//get it offscreen
+				entry += returnMoveToByEntry(
+							(startTime + timeToCompleteWave + moveOffScreenTime ),
+							parseInt(waypoints[waypoints.length-1].x + Math.sign(widthWaveDirection) * 100),
+							parseInt(waypoints[waypoints.length-1].y)
+							);
+				//kill it
+				entry += returnDieAtByEntry( startTime + timeToCompleteWave + moveOffScreenTime );
+
+			}
+			return entry;
+		} //getEntriesForStream
 
 		/**
 
 		*/
 		function addMoveCommandsGivenSnakeWaypoints( contents, smda ) {
 			for ( var i = 0; i < smda.length; i++ ) {
-				contents += "\"" + smda[i].time 
-					+ "&#09; | moveToBy &#09; |";
-					+ (smda[i].x)
-					+ "&#09; | ";
-					+ (smda[i].y) + "\",<br>";
+				contents += returnMoveToByEntry(
+								Math.ceil(smda[i].time),
+								parseInt(smda[i].x),
+								parseInt(smda[i].y)
+								);
 			}
 			return contents;
 		} 
+		function returnDieAtByEntry( time ) {
+			var entry = "\"" + time
+				+ " &#09; | dieAt\",<br>";
+			return entry;
+		}
+		function returnMoveToByEntry( time, x,y ) {
+			var entry = "\"" + time
+				+ " &#09; | moveToBy &#09; | "
+				+ x
+				+ " &#09; | "
+				+ y + "\",<br>";
+			return entry;
+		}
+		function returnSpawnEntry( time, x,y, type ) {
+			if(type === undefined || type === null) {
+				type = "visual:en3,hp:1";
+			}
+
+			var entry = "\"" + time
+				+ " &#09; | spawn &#09; | "
+				+ x
+				+ " &#09; | "
+				+ y 
+				+ " &#09; | "
+				+ type + "\",<br>";
+			return entry;
+		}
 
 		/**
 		xStart 				usually will start on right side of screen
@@ -89,6 +275,7 @@
 			//assume already at xStart,yStart
 			xWaveStart = xStart;
 			yWaveStart = yStart;
+			timeWaveStart = timeStart;
 			for ( var i = 0; i < numberOfWaves; i++ ) {
 				//first generate the rest of the peak
 				mdb = {};
@@ -159,6 +346,12 @@
 
 		} //end getWaypointsForSnaking
 
+
+		/**
+		=============================================================================
+		=============================================================================
+		=============================================================================
+		*/
 		function generateP1SiFormation() {
 			var topdiv = document.getElementById("topdiv");
 			var contents = "";
@@ -306,6 +499,12 @@
 		} //end moveVertical
 
 
+
+		/**
+		=============================================================================
+		=============================================================================
+		=============================================================================
+		*/
 		function generateIntroText() {
 			var topdiv = document.getElementById("topdiv");
 			var contents = "";
@@ -340,6 +539,12 @@
 
 		} // end generateIntroText
 
+
+		/**
+		=============================================================================
+		=============================================================================
+		=============================================================================
+		*/
 		function generateStartOfVarDeclare() {
 			var topdiv = document.getElementById("topdiv");
 			var contents = "";
@@ -349,6 +554,12 @@
 			topdiv.innerHTML = contents;
 		}
 
+
+		/**
+		=============================================================================
+		=============================================================================
+		=============================================================================
+		*/
 		function generateEndBrace() {
 			var topdiv = document.getElementById("topdiv");
 			var contents = "<br>];";
