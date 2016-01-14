@@ -123,31 +123,73 @@
 
 			//delay by until after second stream wave
 			streamStartTime += timeToCompleteWave;
-			streamSize = 2;
+			timeToCompleteWave = 3500;
+			streamSpawnDelay = 300;
+			streamSize = parseInt( timeToCompleteWave / streamSpawnDelay);
 
-			//switch to two pair cross
+			//switch to horizontal stream
 
 			//top cross
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//half 
+			streamStartTime += timeToCompleteWave;
+			//
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves*2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			//half delay
-			streamStartTime += timeToCompleteWave/2;
+			//half
+			streamStartTime += timeToCompleteWave;
 			//middle upper
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//half 
+			streamStartTime += timeToCompleteWave;
+			//
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			//half delay
-			streamStartTime += timeToCompleteWave/2;
+			//half
+			streamStartTime += timeToCompleteWave;
 			//middle lower
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//half 
+			streamStartTime += timeToCompleteWave;
+			//
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			//half delay
-			streamStartTime += timeToCompleteWave/2;
+			//half
+			streamStartTime += timeToCompleteWave;
 			//bottom cross
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//half 
+			streamStartTime += timeToCompleteWave;
+			//
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves*2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
 
 
+			// pause between vertical spire
+			streamStartTime += timeToCompleteWave + 3000;
 
+			// 3/4 screen vertical spire going to the right
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight, cCanvasWidth/4*3, -cCanvasHeight, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave, "makeItVertical"  );
+
+
+
+
+
+
+			// //top cross
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves*2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			// //half delay
+			// streamStartTime += timeToCompleteWave;
+			// //middle upper
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			// //half delay
+			// streamStartTime += timeToCompleteWave;
+			// //middle lower
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			// //half delay
+			// streamStartTime += timeToCompleteWave;
+			// //bottom cross
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves*2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
 
 
 
@@ -162,10 +204,12 @@
 			topdiv.innerHTML += contents;
 		} //end generateP2Snaking
 
-		function getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, xStart, yStart, widthWaveDirection, numberOfWaves, heightOfWaves, pohStraightWay, timeToCompleteWave  ) {
+		function getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, xStart, yStart, widthWaveDirection, numberOfWaves, heightOfWaves, pohStraightWay, timeToCompleteWave, makeItVertical  ) {
 			var entry = "";
 			var moveOffScreenTime = 500;
 			var startTime;
+			if(makeItVertical !== "makeItVertical") { makeItVertical = false; }
+			else { makeItVertical = true; }
 
 			for(var i = 0; i < streamSize; i++) {
 				//spawn
@@ -183,14 +227,26 @@
 									startTime,
 									timeToCompleteWave
 									);
+				//exchange x and y if need to make it vertical
+				if(makeItVertical) {
+					for(var mit = 0; mit < waypoints.length; mit++) {
+						makeItVertical = waypoints[mit].x;
+						waypoints[mit].x = waypoints[mit].y;
+						waypoints[mit].y = makeItVertical;
+					}
+					makeItVertical = true;
+				}
 				//generate the move commands
 				entry = addMoveCommandsGivenSnakeWaypoints( entry, waypoints);
 				//get it offscreen
-				entry += returnMoveToByEntry(
-							(startTime + timeToCompleteWave + moveOffScreenTime ),
-							parseInt(waypoints[waypoints.length-1].x + Math.sign(widthWaveDirection) * 100),
-							parseInt(waypoints[waypoints.length-1].y)
-							);
+				if(makeItVertical) { entry += returnMoveToByEntry( (startTime + timeToCompleteWave + moveOffScreenTime ), parseInt(waypoints[waypoints.length-1].x , parseInt(waypoints[waypoints.length-1].y + Math.sign(widthWaveDirection) * 100)) );}
+				else {
+					entry += returnMoveToByEntry(
+								(startTime + timeToCompleteWave + moveOffScreenTime ),
+								parseInt(waypoints[waypoints.length-1].x + Math.sign(widthWaveDirection) * 100),
+								parseInt(waypoints[waypoints.length-1].y)
+								);
+				}
 				//kill it
 				entry += returnDieAtByEntry( startTime + timeToCompleteWave + moveOffScreenTime );
 
