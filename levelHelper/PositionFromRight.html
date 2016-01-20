@@ -22,9 +22,10 @@
 			generateStartOfVarDeclare();
 
 			// generateIntroText();
-			// var endOfP1 = generateP1SiFormation();
+			//var endOfP1 = generateP1SiFormation();
+			var endOfP1 = generateP1SiFormation( 2000 );
 			// generateP2Snaking(endOfP1);
-			generateP2Snaking(2000);
+			//generateP2Snaking(2000);
 
 			generateEndBrace();
 		}
@@ -334,33 +335,6 @@
 			}
 			return contents;
 		} 
-		function returnDieAtByEntry( time ) {
-			var entry = "\"" + time
-				+ " &#09; | dieAt\",<br>";
-			return entry;
-		}
-		function returnMoveToByEntry( time, x,y ) {
-			var entry = "\"" + time
-				+ " &#09; | moveToBy &#09; | "
-				+ x
-				+ " &#09; | "
-				+ y + "\",<br>";
-			return entry;
-		}
-		function returnSpawnEntry( time, x,y, type ) {
-			if(type === undefined || type === null) {
-				type = "visual:en3,hp:1";
-			}
-
-			var entry = "\"" + time
-				+ " &#09; | spawn &#09; | "
-				+ x
-				+ " &#09; | "
-				+ y 
-				+ " &#09; | "
-				+ type + "\",<br>";
-			return entry;
-		}
 
 		/**
 		xStart 				usually will start on right side of screen
@@ -475,18 +449,21 @@
 		=============================================================================
 		=============================================================================
 		*/
-		function generateP1SiFormation() {
+		function generateP1SiFormation( p1TimeOverride ) {
 			var topdiv = document.getElementById("topdiv");
 			var contents = "";
 
 			var formationWidth = 11;
 			var formationHeight = 9;
 			var startSpawnInvTime = 7200;
+			if(p1TimeOverride !== null || p1TimeOverride !== undefined) {
+				startSpawnInvTime = p1TimeOverride;
+			}
 			var spawnIncrement = 50;
 			var spawnMoveToFormationTime = 300;
 
-			var moveDelayTime = 700; //used to calculate the startMoveInvTime
-			var moveTime = 300;
+			var moveDelayTime = 400; //used to calculate the startMoveInvTime
+			var moveTime = 200;
 			var startMoveInvTime = startSpawnInvTime + moveDelayTime + ( spawnIncrement * formationWidth * formationHeight ) + spawnMoveToFormationTime;
 			var movePixelAmount = cEn1Width * 2;
 			var moveCycles = 4;
@@ -504,99 +481,61 @@
 					//determine spawn time.
 					timeReference = ( startSpawnInvTime + spawnIncrement * (w * formationHeight + h) );
 					//spawn
-					contents += "\"" + ( timeReference )
-						+ "&#09; | spawn &#09; |"
-						+ (cCanvasWidth + cEn1Width) //x
-						+ "&#09; |"
-						+ yFormationStart //y
-						+ "&#09; | visual:en3,hp:1\",<br>";
+					contents += returnSpawnEntry( timeReference, (cCanvasWidth + cEn1Width), yFormationStart, "visual:en3,hp:1" );
 					//then move
-					contents += "\"" + ( timeReference + spawnMoveToFormationTime)
-						+ "&#09; | moveToBy &#09; | "
-						+ xFormationStart //x
-						+ "&#09; |"
-						+ yFormationStart //y
-						+ "\",<br>";
-					//cause down movement
-					contents = moveVertical( contents, moveCycles, startMoveInvTime, moveDelayTime, moveTime, xFormationStart, yFormationStart, movePixelAmount );
-					//reset time counter to after completed first down
-					timeReference = startMoveInvTime + ( moveCycles * moveDelayTime );
-					timeReference += moveDelayTime; //because move left;
-					xFormationStart -= movePixelAmount;
-					yFormationStart += movePixelAmount * moveCycles;
-					//move left 1
-					contents += "\"" + ( timeReference )
-						+ " &#09; | haltUntil\",<br>";
-					contents += "\"" + ( timeReference + moveTime )
-						+ "&#09; | moveToBy &#09; | "
-						+ xFormationStart //x
-						+ "&#09; |"
-						+ yFormationStart //y
-						+ "\",<br>";
-					//update time reference.
-					timeReference += moveTime;
-					//move up 
-					contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, -movePixelAmount );
-					//reset counters
-					timeReference = timeReference + ( moveCycles * moveDelayTime );
-					timeReference += moveDelayTime; //delay before moving left;
-					xFormationStart -= movePixelAmount;
-					yFormationStart -= movePixelAmount * moveCycles;
-					//move left 2
-					contents += "\"" + ( timeReference )
-						+ " &#09; | haltUntil\",<br>";
-					contents += "\"" + ( timeReference + moveTime )
-						+ "&#09; | moveToBy &#09; | "
-						+ xFormationStart //x
-						+ "&#09; |"
-						+ yFormationStart //y
-						+ "\",<br>";
-					//update time reference.
-					timeReference += moveTime;
-					//move down
-					contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, movePixelAmount );
-					//reset counters
-					timeReference = timeReference + ( moveCycles * moveDelayTime );
-					timeReference += moveDelayTime; //delay before moving left;
-					xFormationStart -= movePixelAmount;
-					yFormationStart += movePixelAmount * moveCycles;
-					//move left
-					contents += "\"" + ( timeReference )
-						+ " &#09; | haltUntil\",<br>";
-					contents += "\"" + ( timeReference + moveTime )
-						+ "&#09; | moveToBy &#09; | "
-						+ xFormationStart //x
-						+ "&#09; |"
-						+ yFormationStart //y
-						+ "\",<br>";
-					//update time reference.
-					timeReference += moveTime;
-					//move up
-					contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, -movePixelAmount );
-
-					//now get them off screen.
-
-					//reset counters
-					timeReference = timeReference + moveTime + ( moveCycles * moveDelayTime );
-					yFormationStart -= movePixelAmount * moveCycles;
-					//add an additional amount of upward movements until off screen.
-					//                    \/
-					var jumpsToLeave = h + 1;
-					for ( var i = 0; i < jumpsToLeave; i++ ) {
-						contents += "\"" + (timeReference + (i * moveDelayTime))
-							+ " &#09; | haltUntil\",<br>";
-						contents += "\"" + (timeReference + moveTime +  (i * moveDelayTime))
-							+ "&#09; | moveToBy &#09; | "
-							+ xFormationStart //x
-							+ "&#09; |"
-							+ (yFormationStart - movePixelAmount * (i + 1)) //y
-							+ "\",<br>";
+					contents += returnMoveToByEntry( ( timeReference + spawnMoveToFormationTime), xFormationStart, yFormationStart );
+					timeReference = startMoveInvTime;
+					//keep it moving until off screen
+					while(xFormationStart > -20) {
+						//cause down movement
+						contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, movePixelAmount );
+							//reset time counter to after completed first down
+							timeReference = timeReference + ( moveCycles * moveDelayTime );
+							//timeReference += moveDelayTime; //because move left;
+							xFormationStart -= movePixelAmount;
+							yFormationStart += movePixelAmount * moveCycles;
+						//move left
+						contents += returnHaltUntilEntry( timeReference );
+						contents += returnMoveToByEntry( timeReference + moveTime, xFormationStart, yFormationStart );
+							//update time reference.
+							timeReference += moveTime;
+						//move up 
+						contents = moveVertical( contents, moveCycles, timeReference, moveDelayTime, moveTime, xFormationStart, yFormationStart, -movePixelAmount );
+							//reset counters
+							timeReference = timeReference + ( moveCycles * moveDelayTime );
+							//timeReference += moveDelayTime; //delay before moving left;
+							xFormationStart -= movePixelAmount;
+							yFormationStart -= movePixelAmount * moveCycles;
+						//move left 2
+						contents += returnHaltUntilEntry( timeReference );
+						contents += returnMoveToByEntry( timeReference + moveTime, xFormationStart, yFormationStart );
+							//update time reference.
+							timeReference += moveTime;
 					}
-					contents += "\"" + (timeReference + (jumpsToLeave * moveDelayTime)) 
-						+ "&#09; | dieAt\",<br>";
-					lastDeathTime = (timeReference + (jumpsToLeave * moveDelayTime));
+					contents += returnDieAtByEntry( timeReference );
 
+					lastDeathTime = timeReference;
 
+					// //now get them off screen.
+					// //reset counters
+					// timeReference = timeReference + moveTime + ( moveCycles * moveDelayTime );
+					// yFormationStart -= movePixelAmount * moveCycles;
+					// //add an additional amount of upward movements until off screen.
+					// //                    \/
+					// var jumpsToLeave = h + 1;
+					// for ( var i = 0; i < jumpsToLeave; i++ ) {
+					// 	contents += "\"" + (timeReference + (i * moveDelayTime))
+					// 		+ " &#09; | haltUntil\",<br>";
+					// 	contents += "\"" + (timeReference + moveTime +  (i * moveDelayTime))
+					// 		+ "&#09; | moveToBy &#09; | "
+					// 		+ xFormationStart //x
+					// 		+ "&#09; |"
+					// 		+ (yFormationStart - movePixelAmount * (i + 1)) //y
+					// 		+ "\",<br>";
+					// }
+					// contents += "\"" + (timeReference + (jumpsToLeave * moveDelayTime)) 
+					// 	+ "&#09; | dieAt\",<br>";
+					// lastDeathTime = (timeReference + (jumpsToLeave * moveDelayTime));
 				} //end for height
 			} //end for width;
 
@@ -622,6 +561,37 @@
 		} //end moveVertical
 
 
+		function returnDieAtByEntry( time ) {
+			var entry = "\"" + time
+				+ " &#09; | dieAt\",<br>";
+			return entry;
+		}
+		function returnHaltUntilEntry( time ) {
+			var entry =  "\"" + time + " &#09; | haltUntil\",<br>";
+			return entry;
+		}
+		function returnMoveToByEntry( time, x,y ) {
+			var entry = "\"" + time
+				+ " &#09; | moveToBy &#09; | "
+				+ x
+				+ " &#09; | "
+				+ y + "\",<br>";
+			return entry;
+		}
+		function returnSpawnEntry( time, x,y, type ) {
+			if(type === undefined || type === null) {
+				type = "visual:en3,hp:1";
+			}
+
+			var entry = "\"" + time
+				+ " &#09; | spawn &#09; | "
+				+ x
+				+ " &#09; | "
+				+ y 
+				+ " &#09; | "
+				+ type + "\",<br>";
+			return entry;
+		}
 
 		/**
 		=============================================================================
