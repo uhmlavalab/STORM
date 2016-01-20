@@ -161,11 +161,65 @@
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves*2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
 
 
+
+
+
+
+
 			// pause between vertical spire
+			timeToCompleteWave -= 1000; //one second less than horizontal
 			streamStartTime += timeToCompleteWave + 3000;
 
-			// 3/4 screen vertical spire going to the right
-			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight, cCanvasWidth/4*3, -cCanvasHeight, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave, "makeItVertical"  );
+			//erase me later
+			contents = "";
+			streamStartTime = 2000;
+
+			for(var i = 0; i < 5; i++) {
+				contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight,
+					cCanvasWidth - (heightOfWaves * (i+1)),
+					-cCanvasHeight, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave, "makeItVertical"  );
+				streamStartTime += timeToCompleteWave + streamSpawnDelay * streamSize + 1000;
+			}
+
+			streamStartTime += 2000;
+
+			//erase me later
+			contents = "";
+			streamStartTime = 2000;
+
+			//---------------------------------------------------------------
+			//flood the far right vertical
+			timeToCompleteWave = 5000;
+			streamSize = 25;
+			streamSpawnDelay = 200;
+			//far right starts first
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight,
+				cCanvasWidth - heightOfWaves,
+				-cCanvasHeight, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave, "makeItVertical"  );
+			//setup the middle stream
+			streamStartTime += 1000; //2 second delay
+			streamSize = 20; //1000/50 = 40
+			// //far right starts first
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight,
+				cCanvasWidth/2,
+				-cCanvasHeight, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave, "makeItVertical"  );
+			//setup horizontal
+			streamStartTime += 1000;
+			timeToCompleteWave += 1000;
+			streamSize = 10;
+			//bottom hori stream
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
+				cCanvasHeight / 4 * 3,
+				-cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+			//setup horizontal
+			streamStartTime += 1000;
+			streamSize = 5;
+			//bottom hori stream
+			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
+				cCanvasHeight / 4,
+				-cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
+
+
 
 
 
@@ -214,9 +268,17 @@
 			for(var i = 0; i < streamSize; i++) {
 				//spawn
 				startTime = streamStartTime + (i * streamSpawnDelay);
-				entry += returnSpawnEntry(
-							startTime,
-							xStart, yStart );
+				//exchange x and y if need to make it vertical
+				if(makeItVertical) {
+					entry += returnSpawnEntry(
+								startTime,
+								yStart, xStart );
+				}
+				else {
+					entry += returnSpawnEntry(
+								startTime,
+								xStart, yStart );
+				}
 				//get waypoints
 				var waypoints = getWaypointsForSnaking(
 									xStart, yStart,
@@ -239,7 +301,13 @@
 				//generate the move commands
 				entry = addMoveCommandsGivenSnakeWaypoints( entry, waypoints);
 				//get it offscreen
-				if(makeItVertical) { entry += returnMoveToByEntry( (startTime + timeToCompleteWave + moveOffScreenTime ), parseInt(waypoints[waypoints.length-1].x , parseInt(waypoints[waypoints.length-1].y + Math.sign(widthWaveDirection) * 100)) );}
+				if(makeItVertical) {
+					entry += returnMoveToByEntry(
+								(startTime + timeToCompleteWave + moveOffScreenTime ),
+								parseInt(waypoints[waypoints.length-1].x) ,
+								parseInt(waypoints[waypoints.length-1].y + Math.sign(widthWaveDirection) * 100)
+							);
+				}
 				else {
 					entry += returnMoveToByEntry(
 								(startTime + timeToCompleteWave + moveOffScreenTime ),
