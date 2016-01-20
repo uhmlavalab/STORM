@@ -76,8 +76,8 @@ function createInvader() {
 				var ydiff 		= this.moveCommands[0].y - this.mcYStart;
 				this.x = this.mcXStart + (xdiff * percent);
 				this.y = this.mcYStart + (ydiff * percent);
-				consolePrint( "x:" + this.x);
-				consolePrint( "y:" + this.y );
+				// consolePrint( "x:" + this.x);
+				// consolePrint( "y:" + this.y );
 			}
 
 		} //end if there are commands

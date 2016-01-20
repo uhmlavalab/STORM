@@ -189,8 +189,7 @@
 
 			//---------------------------------------------------------------
 			//flood the far right vertical
-			timeToCompleteWave = 5000;
-			streamSize = 25;
+			streamSize = 38;
 			streamSpawnDelay = 200;
 			//far right starts first
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight,
@@ -198,7 +197,7 @@
 				-cCanvasHeight, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave, "makeItVertical"  );
 			//setup the middle stream
 			streamStartTime += 1000; //2 second delay
-			streamSize = 20; //1000/50 = 40
+			streamSize = 33; //1000/50 = 40
 			// //far right starts first
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight,
 				cCanvasWidth/2,
@@ -206,14 +205,14 @@
 			//setup horizontal
 			streamStartTime += 1000;
 			timeToCompleteWave += 1000;
-			streamSize = 10;
+			streamSize = 23;
 			//bottom hori stream
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
 				cCanvasHeight / 4 * 3,
 				-cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
 			//setup horizontal
 			streamStartTime += 1000;
-			streamSize = 5;
+			streamSize = 18;
 			//bottom hori stream
 			contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth,
 				cCanvasHeight / 4,

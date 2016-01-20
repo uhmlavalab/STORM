@@ -34,11 +34,12 @@ Based on the stageTime.
 */
 commandProcessing.handleTimingOfCommands = function() {
 	var partsOfCommand;
+	var lookAheadLimit = 60; //spawns
+	var laCount = 0;
 	//for each command
 	for(var i = 0; i < commandProcessing.commandList.length; i++) {
 		//get the parts
 		partsOfCommand = commandProcessing.commandList[i].split("|");
-
 		/*
 		Currently handles
 		- discarding of lines without pipes | usually comments or descriptions.
@@ -60,6 +61,24 @@ commandProcessing.handleTimingOfCommands = function() {
 			//remove the last command and reduce index because the removed command.
 			commandProcessing.commandList.splice(i,1);
 			i--;
+		}
+		else if ( partsOfCommand[1].indexOf('spawn') >= 0 ) {
+			laCount++;
+			//if hit look ahead limit stop
+			if(laCount >= lookAheadLimit) {
+				return;
+			}
+			//else skip to next spawn.
+			else {
+				i++;
+				while ( commandProcessing.commandList[i].indexOf('spawn') === -1 ) {
+					i++;
+					if( i >= commandProcessing.commandList.length ) {
+						return;
+					}
+				} //end while looking for next spawn command
+				i--;
+			}
 		}
 		else if (
 			(partsOfCommand[1].indexOf('haltUntil') >= 0  ) 
