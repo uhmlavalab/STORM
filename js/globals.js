@@ -24,6 +24,7 @@ var allEntitiesToUpdate = []; //an experiment with self accounting entities.
 var testVars 		= {}; //TODO states should be their own objects (OO-structures).
 var menuVars 		= {};
 var gameVars 		= {};
+	gameVars.aliveEnemies = 0;
 	gameVars.goSpeed = 1;
 var resultVars 		= {};
 	resultVars.blinkCounter;

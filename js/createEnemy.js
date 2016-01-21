@@ -87,6 +87,10 @@ function createInvader() {
     Overrides the death function on entity.
     */
 	ent.death = function (deathByDamage) {
+		if( ! this.isAlive ) { return; } //prevent double death
+
+		gameVars.aliveEnemies--;
+
 		this.removeFromUpdater();
 		this.isAlive = false;//set isAlive to false
 
@@ -123,6 +127,8 @@ function createInvader() {
         this.x = centerXvalue;
         this.y = centerYvalue;
         this.mcTimeStart = -1;
+
+        gameVars.aliveEnemies++;
 
         while(this.moveCommands.length > 0) { this.moveCommands.pop(); }
         while(this.shootAtTimeCommands.length > 0) { this.shootAtTimeCommands.pop(); }
@@ -172,7 +178,7 @@ function createInvader() {
     	//first handle shoot at time
     	for(var i = 0; i < this.shootAtTimeCommands.length; i++) {
     		if(this.shootAtTimeCommands[i].time <= stageTime) {
-    			this.shoot( this.shootAtTimeCommands[i].type );
+    			this.shoot( this.shootAtTimeCommands[i].type , this.shootAtTimeCommands[i].percent );
     			this.shootAtTimeCommands.shift();
     			i--;
     		}
@@ -185,7 +191,7 @@ function createInvader() {
     	for(var i = 0; i < this.shootIntervalCommands.length; i++) {
     		this.shootIntervalCommands[i].counter += dTime;
     		if(this.shootIntervalCommands[i].time <= this.shootIntervalCommands[i].counter) {
-    			this.shoot(this.shootIntervalCommands[i].type);
+    			this.shoot(this.shootIntervalCommands[i].type, this.shootIntervalCommands[i].percent );
     			this.shootIntervalCommands[i].counter = 0;
     		}
     	}
@@ -199,7 +205,22 @@ function createInvader() {
 
     	command comprised of: time, command, type 
     */
-    ent.shoot = function (type) {
+    ent.shoot = function( type, percent ) {
+    	//immediately return if doesn't clear the percent chance.
+    	if ( percent !== undefined ) {
+    		if ( percent.indexOf("mobLimited,") !== -1){
+    			var pSplit = percent.split(",");
+    			var modifiedChance = 100 * parseInt(pSplit[2]);
+    			modifiedChance = modifiedChance - ( gameVars.aliveEnemies * ( modifiedChance / parseInt( pSplit[1] ) ) );
+
+    			if( Math.random() * 100 > modifiedChance ) { return; }
+    		}
+    		//else flat rate percent
+    		else {
+    			if ( Math.random() * 100 > parseInt(percent) ) { return; }
+    		}
+    	}
+
     	//split the type properties
     	var parts = type.split(",");
     	//set initial values

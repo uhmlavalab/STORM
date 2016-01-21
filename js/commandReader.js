@@ -147,23 +147,25 @@ commandProcessing.cmdProcessLine = function ( partsOfCommand ) {
 			cmd.type = partsOfCommand[1];
 			commandProcessing.currentInvader.addMoveCommand( cmd );
 			break;
-		//	0			1		2
-		// time 	| shootAt | type
+		//	0			1		2		3
+		// time 	| shootAt | type | percent
 		case "shootAtTime":
 			var cmd = {};
-			cmd.time = parseInt(partsOfCommand[0]);
+			cmd.time 	= parseInt(partsOfCommand[0]);
 			cmd.command = partsOfCommand[1];
-			cmd.type = partsOfCommand[2];
+			cmd.type 	= partsOfCommand[2];
+			cmd.percent = partsOfCommand[3];
 			commandProcessing.currentInvader.addShootAtTimeCommand( cmd );
 			break;
-		//	0			1		2 		3
-		// time 	| shootAt | type |
-		//								need to add counter
+		//	0			1			2 		3		4
+		// time 	| shootAt  | 	type |	percent
+		//											need to add counter
 		case "shootInterval":
 			var cmd = {};
-			cmd.time = parseInt(partsOfCommand[0]);
+			cmd.time 	= parseInt(partsOfCommand[0]);
 			cmd.command = partsOfCommand[1];
-			cmd.type = partsOfCommand[2];
+			cmd.type 	= partsOfCommand[2];
+			cmd.percent = partsOfCommand[3];
 			cmd.counter = 0;
 			commandProcessing.currentInvader.addShootIntervalCommand( cmd );
 			break;

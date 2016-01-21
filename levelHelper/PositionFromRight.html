@@ -21,14 +21,84 @@
 		function main() {
 			generateStartOfVarDeclare();
 
+			var endOfPhase;
+
 			// generateIntroText();
-			//var endOfP1 = generateP1SiFormation();
-			var endOfP1 = generateP1SiFormation( 2000 );
-			// generateP2Snaking(endOfP1);
-			//generateP2Snaking(2000);
+			//endOfPhase = generateP1SiFormation();
+			//endOfPhase = generateP1SiFormation( 2000 );
+			// generateP2Snaking(endOfPhase);
+			// generateP2Snaking(2000);
+			generateP3Shapes();
 
 			generateEndBrace();
 		}
+
+		/**
+		=============================================================================
+		=============================================================================
+		=============================================================================
+		*/
+		function generateP3Shapes(endOfP2) {
+			var startTime = endOfP2;
+
+			var rObj = genP3Pong( startTime );
+
+
+		} //end generateP3Shapes
+
+		function genP3Pong(p3PongStartTime) {
+			var paddle = {};
+				paddle.height = 2;
+				paddle.width = 12;
+				paddle.stackHeight = 3;
+			var ball = {};
+				ball.width = 6;
+				ball.height = 6;
+				ball.stackHeight = 3;
+
+			var content = "";
+
+			paddle.topIndexStart 	= 0;
+			paddle.topIndexEnd 		= paddle.height * paddle.width * paddle.stackHeight -1;
+			paddle.bottomIndexStart = paddle.topIndexEnd + 1;
+			paddle.bottomIndexEnd 	= paddle.bottomIndexStart + paddle.topIndexEnd;
+			ball.indexStart 		= paddle.bottomIndexEnd + 1;
+			ball.indexEnd 			= ball.indexStart + ball.width * ball.height * ball.stackHeight - 12;
+
+			paddle.topM1x			= cCanvasWidth/2;
+			paddle.topM1y 			= cEn1Width;
+
+			var m1TimeToGetToPositionBy = 2000 + p3PongStartTime;
+
+
+			for ( var i = paddle.topIndexStart; i <= paddle.topIndexEnd; i++ ) {
+				//first spawn just off the right side of the screen in a random y position.
+				content += returnSpawnEntry( p3PongStartTime, cCanvasWidth + cEn1Width, parseInt( Math.random() * cCanvasHeight ) );
+
+				//get to formation start m1.
+				content += returnMoveToByEntry(
+								m1TimeToGetToPositionBy, 
+								paddle.topM1x + cEn1Width * ( parseInt( i/3 ) % paddle.width ),
+								paddle.topM1y + cEn1Width * ( parseInt( i/3/paddle.width ) ) );
+
+				//get to formation start m1.
+				content += returnMoveToByEntry(
+								m1TimeToGetToPositionBy, 
+								paddle.topM1x + cEn1Width * ( parseInt( i/3 ) % paddle.width ),
+								paddle.topM1y + cEn1Width * ( parseInt( i/3/paddle.width ) ) );
+				
+				//get to formation start m1.
+				content += returnMoveToByEntry(
+								m1TimeToGetToPositionBy, 
+								paddle.topM1x + cEn1Width * ( parseInt( i/3 ) % paddle.width ),
+								paddle.topM1y + cEn1Width * ( parseInt( i/3/paddle.width ) ) );
+
+
+			}
+
+
+
+		} //end genP3Pong
 
 		/**
 		=============================================================================
@@ -171,10 +241,6 @@
 			timeToCompleteWave -= 1000; //one second less than horizontal
 			streamStartTime += timeToCompleteWave + 3000;
 
-			//erase me later
-			contents = "";
-			streamStartTime = 2000;
-
 			for(var i = 0; i < 5; i++) {
 				contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasHeight,
 					cCanvasWidth - (heightOfWaves * (i+1)),
@@ -183,10 +249,6 @@
 			}
 
 			streamStartTime += 2000;
-
-			//erase me later
-			contents = "";
-			streamStartTime = 2000;
 
 			//---------------------------------------------------------------
 			//flood the far right vertical
@@ -220,42 +282,14 @@
 				-cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
 
 
-
-
-
-
-
-
-			// //top cross
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves*2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			// //half delay
-			// streamStartTime += timeToCompleteWave;
-			// //middle upper
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 - heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			// //half delay
-			// streamStartTime += timeToCompleteWave;
-			// //middle lower
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			// //half delay
-			// streamStartTime += timeToCompleteWave;
-			// //bottom cross
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves, -cCanvasWidth, numberOfWaves, heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-			// contents += getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, cCanvasWidth, cCanvasHeight/2 + heightOfWaves*2, -cCanvasWidth, numberOfWaves, -heightOfWaves, percentOfHeightStraightWay, timeToCompleteWave  );
-
-
-
-
-
-
-
+			streamStartTime += streamSize * streamSpawnDelay + timeToCompleteWave;
 
 
 
 
 			topdiv.innerHTML += contents;
+
+			return streamStartTime;
 		} //end generateP2Snaking
 
 		function getEntriesForStream( streamSize, streamStartTime, streamSpawnDelay, xStart, yStart, widthWaveDirection, numberOfWaves, heightOfWaves, pohStraightWay, timeToCompleteWave, makeItVertical  ) {
