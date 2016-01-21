@@ -112,7 +112,7 @@ function createShot() {
     */
     ent.collisionEffects = function( thingCollidedWith ) {
     	//immediately return if not alive. prevents more than one hit.
-    	if ( !this.alive ) { return; }
+    	if ( !this.isAlive ) { return; }
 
     	//don't check against other shots or explosions.
     	//this is intended as a means to reduce computation requirements.

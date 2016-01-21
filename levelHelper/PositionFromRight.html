@@ -26,9 +26,10 @@
 			// generateIntroText();
 			//endOfPhase = generateP1SiFormation();
 			//endOfPhase = generateP1SiFormation( 2000 );
-			// generateP2Snaking(endOfPhase);
-			// generateP2Snaking(2000);
-			generateP3Shapes();
+			//endOfPhase = generateP2Snaking(endOfPhase);
+			//endOfPhase = generateP2Snaking(2000);
+			//endOfPhase = generateP3Shapes(endOfPhase);
+			endOfPhase = generateP3Shapes(100);
 
 			generateEndBrace();
 		}
@@ -40,11 +41,25 @@
 		*/
 		function generateP3Shapes(endOfP2) {
 			var startTime = endOfP2;
+			var topdiv = document.getElementById("topdiv");
+			var contents = "";
 
 			var rObj = genP3Pong( startTime );
+				contents += rObj.content;
+				startTime = rObj.lastDeathTime;
 
+			rObj = genP3Pacman( startTime );
 
+			topdiv.innerHTML += contents;
+
+			return startTime;
 		} //end generateP3Shapes
+
+		function genP3Pacman(p3PacmanStartTime) {
+			var rObj = {};
+			
+		} //end genP3Pacman
+
 
 		function genP3Pong(p3PongStartTime) {
 			var paddle = {};
@@ -52,52 +67,166 @@
 				paddle.width = 12;
 				paddle.stackHeight = 3;
 			var ball = {};
-				ball.width = 6;
-				ball.height = 6;
+				ball.width = 3;
+				ball.height = 3;
 				ball.stackHeight = 3;
 
 			var content = "";
+			var rObj = {};
 
 			paddle.topIndexStart 	= 0;
 			paddle.topIndexEnd 		= paddle.height * paddle.width * paddle.stackHeight -1;
 			paddle.bottomIndexStart = paddle.topIndexEnd + 1;
 			paddle.bottomIndexEnd 	= paddle.bottomIndexStart + paddle.topIndexEnd;
 			ball.indexStart 		= paddle.bottomIndexEnd + 1;
-			ball.indexEnd 			= ball.indexStart + ball.width * ball.height * ball.stackHeight - 12;
+			ball.indexEnd 			= ball.indexStart + (ball.width * ball.height * ball.stackHeight) -1 ;
 
-			paddle.topM1x			= cCanvasWidth/2;
+			paddle.topM1x			= cCanvasWidth/3;
 			paddle.topM1y 			= cEn1Width;
+			paddle.topM2x			= cCanvasWidth - (cEn1Width * paddle.width) - cEn1Width;
+			paddle.topM2y 			= cEn1Width;
+			paddle.topM3x			= cCanvasWidth/3;
+			paddle.topM3y 			= cEn1Width;
+			paddle.topM4x			= cCanvasWidth - (cEn1Width * paddle.width) - cEn1Width;
+			paddle.topM4y 			= cEn1Width;
+			paddle.bottomM1y 		= cCanvasHeight - (cEn1Width * 2) - (paddle.height * cEn1Width);
+
+			ball.m1x 				= paddle.topM1x +  (ball.width * cEn1Width / 2);
+			ball.m1y 				= paddle.bottomM1y + cEn1Width - (ball.height * cEn1Width);
+			ball.m2x 				= paddle.topM2x + (ball.width * cEn1Width);
+			ball.m2y 				= paddle.topM2y + (cEn1Width * paddle.height);
+			ball.m3ax 				= cCanvasWidth - (ball.width * cEn1Width);
+			ball.m3ay 				= cCanvasHeight / 3;
+			ball.m3bx 				= paddle.topM3x + (cEn1Width * paddle.width/ 4 * 3) - (ball.width * cEn1Width / 2);
+			ball.m3by 				= paddle.bottomM1y + cEn1Width  - (ball.height * cEn1Width);
+			ball.m4ax 				= cCanvasWidth / 4 * 3;
+			ball.m4ay 				= paddle.topM2y + (cEn1Width * paddle.height);
+			ball.m4bx 				= cCanvasWidth - (ball.width * cEn1Width);
+			ball.m4by 				= cCanvasHeight + cEn1Width;
 
 			var m1TimeToGetToPositionBy = 2000 + p3PongStartTime;
+			var m2PaddleLeftToRight = 3000 + m1TimeToGetToPositionBy;
+			var m3aBallBounceOffRight = 1000 + m2PaddleLeftToRight;
+			var m3PaddleRightToLeft = 3000 + m2PaddleLeftToRight;
+			var m4aBallBounceAroundMid = 1500 + m3PaddleRightToLeft;
+			var m4bBallFallThrough = 2500 + m3PaddleRightToLeft;
+			var m4PaddleLeftToRight = 3000 + m3PaddleRightToLeft;
+			var m5Pause = 1000 + m4PaddleLeftToRight;
+			var m6MoveOffScreen = 1000 + m5Pause;
 
+			var lastDeathTime = m6MoveOffScreen;
+
+			//top paddle
 
 			for ( var i = paddle.topIndexStart; i <= paddle.topIndexEnd; i++ ) {
 				//first spawn just off the right side of the screen in a random y position.
 				content += returnSpawnEntry( p3PongStartTime, cCanvasWidth + cEn1Width, parseInt( Math.random() * cCanvasHeight ) );
-
 				//get to formation start m1.
 				content += returnMoveToByEntry(
 								m1TimeToGetToPositionBy, 
-								paddle.topM1x + cEn1Width * ( parseInt( i/3 ) % paddle.width ),
-								paddle.topM1y + cEn1Width * ( parseInt( i/3/paddle.width ) ) );
-
-				//get to formation start m1.
+								paddle.topM1x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.topM1y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m2
 				content += returnMoveToByEntry(
-								m1TimeToGetToPositionBy, 
-								paddle.topM1x + cEn1Width * ( parseInt( i/3 ) % paddle.width ),
-								paddle.topM1y + cEn1Width * ( parseInt( i/3/paddle.width ) ) );
-				
-				//get to formation start m1.
+								m2PaddleLeftToRight, 
+								paddle.topM2x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.topM2y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m3
 				content += returnMoveToByEntry(
-								m1TimeToGetToPositionBy, 
-								paddle.topM1x + cEn1Width * ( parseInt( i/3 ) % paddle.width ),
-								paddle.topM1y + cEn1Width * ( parseInt( i/3/paddle.width ) ) );
-
-
+								m3PaddleRightToLeft, 
+								paddle.topM3x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.topM3y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m4
+				content += returnMoveToByEntry(
+								m4PaddleLeftToRight, 
+								paddle.topM4x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.topM4y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m5
+				content += returnHaltUntilEntry( m5Pause );
+				//m6
+				content += returnMoveToByEntry(
+								m6MoveOffScreen, 
+								paddle.topM4x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								(-1 * cEn1Width * (paddle.height + 1)) + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
 			}
 
+			//bottom paddle
 
+			for ( var i = paddle.bottomIndexStart; i <= paddle.bottomIndexEnd; i++ ) {
+				//first spawn just off the right side of the screen in a random y position.
+				content += returnSpawnEntry( p3PongStartTime, cCanvasWidth + cEn1Width, parseInt( Math.random() * cCanvasHeight ) );
+				//get to formation start m1.
+				content += returnMoveToByEntry(
+								m1TimeToGetToPositionBy, 
+								paddle.topM1x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.bottomM1y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m2
+				content += returnMoveToByEntry(
+								m2PaddleLeftToRight, 
+								paddle.topM2x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.bottomM1y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m3
+				content += returnMoveToByEntry(
+								m3PaddleRightToLeft, 
+								paddle.topM3x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.bottomM1y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m4
+				content += returnMoveToByEntry(
+								m4PaddleLeftToRight, 
+								paddle.topM4x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								paddle.bottomM1y + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				//m5
+				content += returnHaltUntilEntry( m5Pause );
+				//m6
+				content += returnMoveToByEntry(
+								m6MoveOffScreen, 
+								paddle.topM4x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
+								cCanvasHeight + cEn1Width + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+			}
 
+			//ball
+
+			for ( var i = ball.indexStart; i <= ball.indexEnd; i++ ) {
+				//first spawn just off the right side of the screen in a random y position.
+				content += returnSpawnEntry( p3PongStartTime, cCanvasWidth + cEn1Width, parseInt( Math.random() * cCanvasHeight ) );
+				i -= ball.indexStart;
+				//m1
+				content += returnMoveToByEntry(
+								m1TimeToGetToPositionBy, 
+								ball.m1x + ( parseInt( i / 3) % 3 * cEn1Width),
+								ball.m1y + ( parseInt( i / 3 / 3) * cEn1Width) );
+				//m2
+				content += returnMoveToByEntry(
+								m2PaddleLeftToRight, 
+								ball.m2x + ( parseInt( i / 3) % 3 * cEn1Width),
+								ball.m2y + ( parseInt( i / 3 / 3) * cEn1Width) );
+				//m3a
+				content += returnMoveToByEntry(
+								m3aBallBounceOffRight, 
+								ball.m3ax + ( parseInt( i / 3) % 3 * cEn1Width),
+								ball.m3ay + ( parseInt( i / 3 / 3) * cEn1Width) );
+				//m3b
+				content += returnMoveToByEntry(
+								m3PaddleRightToLeft, 
+								ball.m3bx + ( parseInt( i / 3) % 3 * cEn1Width),
+								ball.m3by + ( parseInt( i / 3 / 3) * cEn1Width) );
+				//m4a
+				content += returnMoveToByEntry(
+								m4aBallBounceAroundMid, 
+								ball.m4ax + ( parseInt( i / 3) % 3 * cEn1Width),
+								ball.m4ay + ( parseInt( i / 3 / 3) * cEn1Width) );
+				//m4b
+				content += returnMoveToByEntry(
+								m4bBallFallThrough, 
+								ball.m4bx + ( parseInt( i / 3) % 3 * cEn1Width),
+								ball.m4by + ( parseInt( i / 3 / 3) * cEn1Width) );
+				i += ball.indexStart;
+			}
+
+			rObj.content = content;
+			rObj.lastDeathTime = lastDeathTime;
+
+			return rObj;
 		} //end genP3Pong
 
 		/**
