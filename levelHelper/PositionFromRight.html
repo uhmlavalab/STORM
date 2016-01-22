@@ -60,6 +60,107 @@
 			
 		} //end genP3Pacman
 
+		/**
+		Currently pacman is 15x15 = 255.
+		      ***
+		   *********
+		  ***********
+		 *************
+		 *************
+		 *************
+		***************
+		***************
+		***************
+		 *************
+		 *************
+		 *************
+		  ***********
+		   *********
+		      ***
+
+		      ***
+		   *********
+		  ***********
+		   ***********
+		    **********
+		     *********
+		      *********
+		       ********
+		      *********
+		     *********
+		    **********
+		   ***********
+		  ***********
+		   *********
+		      ***
+
+		Given the index, and whether or not the mouth is open, where should a particular invader be?
+
+
+
+		*/
+		function gp3getPacmanLocationEntry() {
+			var a = -999;
+			var layoutClosedMouth = [
+							[a,a,a, 	a,a,a,		b,b,b,		a,a,a, 		a,a,a],	//0
+							[a,a,a,		b,b,b, 		b,b,b, 		b,b,b, 	 	a,a,a],	//1
+							[a,a,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,a,a],	//2
+							[a,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,a], //3
+							[a,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,a], 
+							[a,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,a], 
+							[b,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,b], 
+							[b,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,b], 
+							[b,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,b], 
+							[a,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,a], 
+							[a,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,a], 
+							[a,b,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,b,a], 
+							[a,a,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,a,a],
+							[a,a,a,		b,b,b, 		b,b,b, 		b,b,b, 	 	a,a,a],
+							[a,a,a, 	a,a,a,		b,b,b,		a,a,a, 		a,a,a]
+						];
+			var layoutOpenMouth = [
+							[a,a,a, 	a,a,a,		b,b,b,		a,a,a, 		a,a,a],	//0
+							[a,a,a,		b,b,b, 		b,b,b, 		b,b,b, 	 	a,a,a],	//1
+							[a,a,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,a,a],	//2
+							[a,a,a,		b,b,b, 		b,b,b, 		b,b,b, 	 	b,b,a],
+							[a,a,a, 	a,b,b, 		b,b,b, 		b,b,b, 	 	b,b,a],
+							[a,a,a, 	a,a,b, 		b,b,b, 		b,b,b, 	 	b,b,a],
+
+							[a,a,a, 	a,a,a, 		b,b,b, 		b,b,b, 	 	b,b,b],
+							[a,a,a, 	a,a,a, 		a,b,b, 		b,b,b, 	 	b,b,b],
+							[a,a,a, 	a,a,a, 		a,b,b, 		b,b,b, 	 	b,b,b],
+
+							[a,a,a, 	a,a,b, 		b,b,b, 		b,b,b, 	 	b,b,a],
+							[a,a,a, 	a,b,b, 		b,b,b, 		b,b,b, 	 	b,b,a],
+							[a,a,a,		b,b,b, 		b,b,b, 		b,b,b, 	 	b,b,a],
+							[a,a,b, 	b,b,b, 		b,b,b, 		b,b,b, 		b,a,a],
+							[a,a,a,		b,b,b, 		b,b,b, 		b,b,b, 	 	a,a,a],
+							[a,a,a, 	a,a,a,		b,b,b,		a,a,a, 		a,a,a]
+						];
+			var indexTracker = 0;
+
+			for ( var h = 0; h < layoutClosedMouth.length; h++ ) {
+				for ( var w = 0; w < layoutClosedMouth[h].length; w++ ) {
+					if ( layoutClosedMouth[h][w] === b ) {
+						layoutClosedMouth[h][w] = indexTracker;
+						indexTracker++;
+					}
+				}
+			}
+			for ( var h = 0; h < layoutOpenMouth.length; h++ ) {
+				for ( var w = 0; w < layoutOpenMouth[h].length; w++ ) {
+					if ( layoutOpenMouth[h][w] === a && layoutClosedMouth[h][w] !== a ) {
+						layoutOpenMouth[h][w] = -1 * layoutClosedMouth[h][w];
+					}
+					else {
+						layoutOpenMouth[h][w] = layoutClosedMouth[h][w];
+					}
+				}
+			}
+
+			return entry;
+		} //end 
+
 
 		function genP3Pong(p3PongStartTime) {
 			var paddle = {};
