@@ -69,7 +69,7 @@ var c180OverPi 				= 180 / Math.PI;
 var cEn1Width				= 32;
 var cBgStarMoveSpeed 		= 0.5;
 var cGameEnemyLimit 		= 500;
-var cGameShotLimit 			= 500;
+var cGameShotLimit 			= 1000;
 var cGameExplosionLimit		= 20;
 
 //gameState tracking

@@ -23,13 +23,10 @@
 
 			var endOfPhase;
 
-			// generateIntroText();
-			//endOfPhase = generateP1SiFormation();
-			//endOfPhase = generateP1SiFormation( 2000 );
-			//endOfPhase = generateP2Snaking(endOfPhase);
-			//endOfPhase = generateP2Snaking(2000);
-			//endOfPhase = generateP3Shapes(endOfPhase);
-			endOfPhase = generateP3Shapes(100);
+			generateIntroText();
+			endOfPhase = generateP1SiFormation( 8000 ); //unfortunately hard coded for now
+			endOfPhase = generateP2Snaking(endOfPhase);
+			endOfPhase = generateP3Shapes(endOfPhase);
 
 			generateEndBrace();
 		}
@@ -45,13 +42,13 @@
 			var contents = "";
 
 			var rObj;
-			// rObj = genP3Pong( startTime );
-			// 	contents += rObj.content;
-			// 	startTime = rObj.lastDeathTime;
-
+			rObj = genP3Pong( startTime );
+				contents += rObj.contents;
+				startTime = rObj.lastDeathTime;
 			
-			rObj = genP3Pacman( startTime );
-			topdiv.innerHTML += rObj.contents;
+			rObj = genP3Pacman( startTime + 2000 );
+				contents += rObj.contents;
+			topdiv.innerHTML += contents;
 
 
 			// rObj = gp3SetupPacmanLocations();
@@ -104,7 +101,7 @@
 					
 					//special case shooting
 					if( i === 84 || i === 85 || i === 86) {
-						rObj.contents += returnShootAtTimeEntry( timeReference, "amountOfShots:10,speed:80,target:circleBurst", "100" );
+						rObj.contents += returnShootAtTimeEntry( timeReference, "amountOfShots:30,speed:300,target:circleBurst", "100" );
 					}
 
 					//
@@ -338,6 +335,8 @@
 			for ( var i = paddle.topIndexStart; i <= paddle.topIndexEnd; i++ ) {
 				//first spawn just off the right side of the screen in a random y position.
 				content += returnSpawnEntry( p3PongStartTime, cCanvasWidth + cEn1Width, parseInt( Math.random() * cCanvasHeight ) );
+
+				content += returnShootIntervalEntry( 1000, "amountOfShots:1,speed:80,target:player", 6);
 				//get to formation start m1.
 				content += returnMoveToByEntry(
 								m1TimeToGetToPositionBy, 
@@ -365,6 +364,7 @@
 								m6MoveOffScreen, 
 								paddle.topM4x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
 								(-1 * cEn1Width * (paddle.height + 1)) + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				content += returnDieAtByEntry( m6MoveOffScreen );
 			}
 
 			//bottom paddle
@@ -372,6 +372,8 @@
 			for ( var i = paddle.bottomIndexStart; i <= paddle.bottomIndexEnd; i++ ) {
 				//first spawn just off the right side of the screen in a random y position.
 				content += returnSpawnEntry( p3PongStartTime, cCanvasWidth + cEn1Width, parseInt( Math.random() * cCanvasHeight ) );
+
+				content += returnShootIntervalEntry( 1000, "amountOfShots:1,speed:80,target:player", 6);
 				//get to formation start m1.
 				content += returnMoveToByEntry(
 								m1TimeToGetToPositionBy, 
@@ -399,6 +401,7 @@
 								m6MoveOffScreen, 
 								paddle.topM4x + cEn1Width * ( parseInt( i/paddle.stackHeight ) % paddle.width ),
 								cCanvasHeight + cEn1Width + cEn1Width * ( parseInt( i/paddle.stackHeight/paddle.width ) ) );
+				content += returnDieAtByEntry( m6MoveOffScreen );
 			}
 
 			//ball
@@ -417,30 +420,46 @@
 								m2PaddleLeftToRight, 
 								ball.m2x + ( parseInt( i / 3) % 3 * cEn1Width),
 								ball.m2y + ( parseInt( i / 3 / 3) * cEn1Width) );
+				if( 6 === i) {
+					content += returnShootAtTimeEntry( m2PaddleLeftToRight, "amountOfShots:60,speed:150,target:circleBurst", "100" );
+					}
 				//m3a
 				content += returnMoveToByEntry(
 								m3aBallBounceOffRight, 
 								ball.m3ax + ( parseInt( i / 3) % 3 * cEn1Width),
 								ball.m3ay + ( parseInt( i / 3 / 3) * cEn1Width) );
+				if( 6 === i) {
+					content += returnShootAtTimeEntry( m3aBallBounceOffRight, "amountOfShots:60,speed:150,target:circleBurst", "100" );
+					}
 				//m3b
 				content += returnMoveToByEntry(
 								m3PaddleRightToLeft, 
 								ball.m3bx + ( parseInt( i / 3) % 3 * cEn1Width),
 								ball.m3by + ( parseInt( i / 3 / 3) * cEn1Width) );
+				if( 6 === i) {
+					content += returnShootAtTimeEntry( m3PaddleRightToLeft, "amountOfShots:60,speed:150,target:circleBurst", "100" );
+					}
 				//m4a
 				content += returnMoveToByEntry(
 								m4aBallBounceAroundMid, 
 								ball.m4ax + ( parseInt( i / 3) % 3 * cEn1Width),
 								ball.m4ay + ( parseInt( i / 3 / 3) * cEn1Width) );
+				if( 6 === i) {
+					content += returnShootAtTimeEntry( m4aBallBounceAroundMid, "amountOfShots:60,speed:150,target:circleBurst", "100" );
+					}
 				//m4b
 				content += returnMoveToByEntry(
 								m4bBallFallThrough, 
 								ball.m4bx + ( parseInt( i / 3) % 3 * cEn1Width),
 								ball.m4by + ( parseInt( i / 3 / 3) * cEn1Width) );
+				if( 6 === i) {
+					content += returnShootAtTimeEntry( m4bBallFallThrough, "amountOfShots:60,speed:150,target:circleBurst", "100" );
+					}
+				content += returnDieAtByEntry( m4bBallFallThrough );
 				i += ball.indexStart;
 			}
 
-			rObj.content = content;
+			rObj.contents = content;
 			rObj.lastDeathTime = lastDeathTime;
 
 			return rObj;
@@ -695,6 +714,7 @@
 								parseInt(waypoints[waypoints.length-1].y)
 								);
 				}
+				entry += returnShootIntervalEntry( 1000, "amountOfShots:3,speed:200,target:player", 10  );
 				//kill it
 				entry += returnDieAtByEntry( startTime + timeToCompleteWave + moveOffScreenTime );
 
@@ -862,8 +882,10 @@
 					timeReference = ( startSpawnInvTime + spawnIncrement * (w * formationHeight + h) );
 					//spawn
 					contents += returnSpawnEntry( timeReference, (cCanvasWidth + cEn1Width), yFormationStart, "visual:en3,hp:1" );
+					contents += returnShootIntervalEntry(3000, "amountOfShots:1,speed:300,target:player", "mobLimited,100,10" );
 					//then move
 					contents += returnMoveToByEntry( ( timeReference + spawnMoveToFormationTime), xFormationStart, yFormationStart );
+					contents += returnShootAtTimeEntry(( timeReference + spawnMoveToFormationTime), "amountOfShots:1,speed:300,target:player", "100" );
 					timeReference = startMoveInvTime;
 					//keep it moving until off screen
 					while(xFormationStart > -20) {
