@@ -49,10 +49,13 @@
 			// 	contents += rObj.content;
 			// 	startTime = rObj.lastDeathTime;
 
+			
 			rObj = genP3Pacman( startTime );
-
-
 			topdiv.innerHTML += rObj.contents;
+
+
+			// rObj = gp3SetupPacmanLocations();
+			// topdiv.innerHTML += rObj.doubleCheckPattern
 
 			return startTime;
 		} //end generateP3Shapes
@@ -68,8 +71,11 @@
 
 			//timeReference = p3PacmanStartTime;
 
+
+
 			//for each pacman pieces, tripple layer
 			for( var i = 0; i < totalPacmanPieces * 2; i++) {
+
 				indexToUse = i % totalPacmanPieces;
 				timeReference = p3PacmanStartTime;
 
@@ -88,20 +94,36 @@
 				timeReference += 2000;
 				rObj.contents += gp3GetPacmanMoveToByLocation(rObj, timeReference, cCanvasWidth - rObj.pacmanSize * cEn1Width, cCanvasHeight/2 - rObj.pacmanSize/2 * cEn1Width, indexToUse, false  );
 
-				for(var a = 0; a < 3; a++) {
+
+				for(var a = 0; a < 10; a++) {
 					//halt with closed mouth
-					timeReference += 1000;
+					timeReference += 3000;
 					rObj.contents += returnHaltUntilEntry(timeReference);
 					//open mouth
 					rObj.contents += gp3GetPacmanMoveToByLocation(rObj, timeReference, cCanvasWidth - rObj.pacmanSize * cEn1Width, cCanvasHeight/2 - rObj.pacmanSize/2 * cEn1Width, indexToUse, true  );
+					
+					//special case shooting
+					if( i === 84 || i === 85 || i === 86) {
+						rObj.contents += returnShootAtTimeEntry( timeReference, "amountOfShots:10,speed:80,target:circleBurst", "100" );
+					}
+
 					//
-					timeReference += 1000;
+					timeReference += 3000;
 					rObj.contents += returnHaltUntilEntry(timeReference);
 					//
 					rObj.contents += gp3GetPacmanMoveToByLocation(rObj, timeReference, cCanvasWidth - rObj.pacmanSize * cEn1Width, cCanvasHeight/2 - rObj.pacmanSize/2 * cEn1Width, indexToUse, false  );
 				}
 
-			} //end for each
+
+
+
+				//special case shooting
+				if ( i === 16) {
+					//amountOfShots:10,speed:50,target:circleBurst
+					rObj.contents += returnShootIntervalEntry( 1000, "amountOfShots:1,speed:80,target:player", "100" );
+				}
+
+			} //end for each invader
 
 			return rObj;
 			
@@ -235,22 +257,22 @@
 			var rObj = {};
 				rObj.layoutClosedMouth = layoutClosedMouth;
 				rObj.layoutOpenMouth = layoutOpenMouth;
-				rObj.contents = "";
+				rObj.doubleCheckPattern = "";
 
-			// for ( var h = 0; h < layoutClosedMouth.length; h++ ) {
-			// 	for ( var w = 0; w < layoutClosedMouth[h].length; w++ ) {
-			// 		rObj.contents += layoutClosedMouth[h][w];
-			// 	}
-			// 	rObj.contents += "<br>";
-			// }
-			// rObj.contents += "<br>";
-			// rObj.contents += "<br>";
-			// for ( var h = 0; h < layoutOpenMouth.length; h++ ) {
-			// 	for ( var w = 0; w < layoutOpenMouth[h].length; w++ ) {
-			// 		rObj.contents += layoutOpenMouth[h][w];
-			// 	}
-			// 	rObj.contents += "<br>";
-			// }
+			for ( var h = 0; h < layoutClosedMouth.length; h++ ) {
+				for ( var w = 0; w < layoutClosedMouth[h].length; w++ ) {
+					rObj.doubleCheckPattern += layoutClosedMouth[h][w];
+				}
+				rObj.doubleCheckPattern += "<br>";
+			}
+			rObj.doubleCheckPattern += "<br>";
+			rObj.doubleCheckPattern += "<br>";
+			for ( var h = 0; h < layoutOpenMouth.length; h++ ) {
+				for ( var w = 0; w < layoutOpenMouth[h].length; w++ ) {
+					rObj.doubleCheckPattern += layoutOpenMouth[h][w];
+				}
+				rObj.doubleCheckPattern += "<br>";
+			}
 
 			return rObj;
 		} //end 
@@ -918,6 +940,39 @@
 			return contents;
 		} //end moveVertical
 
+
+		function returnShootAtTimeEntry(time, type, percent) {
+			if(percent === undefined || percent === null) {
+				percent = "100";
+			}
+			if(type === undefined || type === null) {
+				type = "amountOfShots:1,speed:80,target:player";
+			}
+
+			var entry = "\"" + time
+				+ " &#09; | shootAtTime &#09; | "
+				+ type
+				+ " &#09; | "
+				+ percent + "\",<br>";
+			return entry;
+
+		}
+
+		function returnShootIntervalEntry(time, type, percent) {
+			if(percent === undefined || percent === null) {
+				percent = "100";
+			}
+			if(type === undefined || type === null) {
+				type = "amountOfShots:1,speed:80,target:player";
+			}
+
+			var entry = "\"" + time
+				+ " &#09; | shootInterval &#09; | "
+				+ type
+				+ " &#09; | "
+				+ percent + "\",<br>";
+			return entry;
+		}
 
 		function returnDieAtByEntry( time ) {
 			var entry = "\"" + time
