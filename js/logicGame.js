@@ -70,6 +70,9 @@ function prepAndSwitchToGame(level) {
 Handles input for game.
 */
 function inputGame() {
+
+	inputGamePad();
+
 	//first clear out all move directions to prevent always moving.
 	for(var i = 0; i < allPlayers.length; i++) {
 		allPlayers[i].moveDirection = "none";
@@ -128,6 +131,43 @@ function inputGame() {
 	}
 
 } //inputGame
+
+
+//-----------------------------------------------------------------------------------------------------------
+
+function inputGamePad() {
+	var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+	//var gamepads = navigator.getGamepads();
+	if (!gamepads) {
+		return;
+	}
+
+	for ( var i = 0; i < gamepads.length; i++ ) {
+		//check for down
+		if (gamepads[i].axes[0] > -.7 ) {
+			keyboardKeys[ playerControls[i].left ] = "down";
+		}
+		if (gamepads[i].axes[0] > .7 ) {
+			keyboardKeys[ playerControls[i].right ] = "down";
+		}
+		if (gamepads[i].axes[1] > -.7 ) {
+			keyboardKeys[ playerControls[i].up ] = "down";
+		}
+		if (gamepads[i].axes[1] > .7 ) {
+			keyboardKeys[ playerControls[i].down ] = "down";
+		}
+
+		//shooting
+		if( gamepads[i].buttons[0] ) {
+			keyboardKeys[ playerControls[i].shoot ] = "down";
+		}
+	}
+}//end inputGamePad
+
+
+
+//-----------------------------------------------------------------------------------------------------------
+
 
 /**
 Handles logic for game.

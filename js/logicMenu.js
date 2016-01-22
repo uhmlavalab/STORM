@@ -57,6 +57,8 @@ function prepAndSwitchToMenu() {
 Handles input for menu.
 */
 function inputMenu() {
+	inputMenuPad();
+
 	for( var key in keyboardKeys) {
 		if(keyboardKeys[key] === 'down') {
 			debugPrint( key + ":" + keyboardKeys[key], "menu");
@@ -69,6 +71,30 @@ function inputMenu() {
 	}
 
 } //end inputMenu
+
+//-----------------------------------------------------------------------------------------------------------
+
+function inputMenuPad() {
+	var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
+	//var gamepads = navigator.getGamepads();
+	if (gamepads === null || gamepads === undefined) {
+		return;
+	}
+
+	for (var i = 0 ; i < gamepads[0].buttons.length ; i++) {
+		if ( gamepads[i].buttons ) {
+			for (var j = 0 ; j < gamepads[1].buttons.length ; j++) {
+				if ( gamepads[i].buttons ) {
+					keyboardKeys['Enter'] = down;
+					return;
+				}
+			}
+		}
+	}
+} //end inputMenuPad
+
+
+//-----------------------------------------------------------------------------------------------------------
 
 /**
 Handles logic for Testing.
