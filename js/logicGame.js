@@ -61,6 +61,7 @@ function prepAndSwitchToGame(level) {
 
 	placeScreenVisuals(allGameVisuals);
 
+    audio_ingame_song.play();
 } //end prepAndSwitchToGame
 
 

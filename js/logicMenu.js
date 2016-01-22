@@ -67,6 +67,7 @@ function inputMenu() {
 	}
 
 	if( isKeyboardKeyDown('13') || isKeyboardKeyDown('Enter') ) {
+		audio_confirm.play();
 		prepAndSwitchToGame();
 	}
 
@@ -77,7 +78,7 @@ function inputMenu() {
 function inputMenuPad() {
 	var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 	//var gamepads = navigator.getGamepads();
-	if (gamepads === null || gamepads === undefined) {
+	if (gamepads.length < 2) {
 		return;
 	}
 

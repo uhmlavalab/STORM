@@ -124,6 +124,8 @@ function createPlayer() {
 		this.respawnCounter 	= 0;
 		this.readyToRespawn	= false;
 
+		audio_explosion1.play();
+
 		// maybe can't remove player from updater even if dead.
 		//this.removeFromUpdater();
 
@@ -189,7 +191,10 @@ function createPlayer() {
     	//parameters 		xspawn 	yspawn 	xdest 	ydest			
     	shotToUse.spawnAt( this.x, this.y, 	this.x + 1000, this.y, 	this.shotSpeed, 		allPlayers.indexOf(this), this.shotSize);
     	this.activeShots++;
-    	debugPrint("Player" + allPlayers.indexOf(this) + " activating shot", "player");
+
+    	audio_shoot.play();
+
+    	//debugPrint("Player" + allPlayers.indexOf(this) + " activating shot", "player");
 
     } //end shootUpdate
 

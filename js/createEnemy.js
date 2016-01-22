@@ -104,6 +104,7 @@ function createInvader() {
 		if(deathByDamage !== undefined && deathByDamage && this.lastHitByPlayer !== -1) {
 			allPlayers[ this.lastHitByPlayer ].score++;
 			debugPrint("Score++ to p" + (this.lastHitByPlayer + 1) , "enemy" );
+			audio_explosion2.play();
 		}
 		ent.lastHitByPlayer = -1;
 
