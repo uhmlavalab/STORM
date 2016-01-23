@@ -853,7 +853,7 @@
 			var topdiv = document.getElementById("topdiv");
 			var contents = "";
 
-			var formationWidth = 11;
+			var formationWidth = 8;
 			var formationHeight = 9;
 			var startSpawnInvTime = 7200;
 			if(p1TimeOverride !== null || p1TimeOverride !== undefined) {
@@ -882,10 +882,10 @@
 					timeReference = ( startSpawnInvTime + spawnIncrement * (w * formationHeight + h) );
 					//spawn
 					contents += returnSpawnEntry( timeReference, (cCanvasWidth + cEn1Width), yFormationStart, "visual:en3,hp:1" );
-					contents += returnShootIntervalEntry(3000, "amountOfShots:1,speed:300,target:player", "mobLimited,100,10" );
+					contents += returnShootIntervalEntry(3000, "amountOfShots:1,speed:300,target:player", "mobLimited,72,1" );
 					//then move
 					contents += returnMoveToByEntry( ( timeReference + spawnMoveToFormationTime), xFormationStart, yFormationStart );
-					contents += returnShootAtTimeEntry(( timeReference + spawnMoveToFormationTime), "amountOfShots:1,speed:300,target:player", "100" );
+					//contents += returnShootAtTimeEntry(( timeReference + spawnMoveToFormationTime), "amountOfShots:1,speed:300,target:player", "100" );
 					timeReference = startMoveInvTime;
 					//keep it moving until off screen
 					while(xFormationStart > -20) {
@@ -894,7 +894,7 @@
 							//reset time counter to after completed first down
 							timeReference = timeReference + ( moveCycles * moveDelayTime );
 							//timeReference += moveDelayTime; //because move left;
-							xFormationStart -= movePixelAmount;
+							xFormationStart -= movePixelAmount * 2;
 							yFormationStart += movePixelAmount * moveCycles;
 						//move left
 						contents += returnHaltUntilEntry( timeReference );
@@ -906,7 +906,7 @@
 							//reset counters
 							timeReference = timeReference + ( moveCycles * moveDelayTime );
 							//timeReference += moveDelayTime; //delay before moving left;
-							xFormationStart -= movePixelAmount;
+							xFormationStart -= movePixelAmount * 2;
 							yFormationStart -= movePixelAmount * moveCycles;
 						//move left 2
 						contents += returnHaltUntilEntry( timeReference );

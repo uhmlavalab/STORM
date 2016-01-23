@@ -27,6 +27,7 @@ function createPlayer() {
 		ent.shotSizeDefault = 16;
 		ent.moveDirection 	= 'none';
 		ent.tryShoot 		= false;
+		ent.lives 				= 3; //starting life. How many times can respawn.
 
 		ent.respawnTime 	= 3000;
 		ent.respawnCounter 	= 0;
@@ -50,6 +51,11 @@ function createPlayer() {
 			this.vScore.text("Score:" + this.score);
 			this.vScoreOutline.x( -1 * this.vScoreOutline.getTextWidth()/2 -1 );
 			this.vScore.x( this.vScoreOutline.x() + 1 );
+			
+			this.vLivesOutline.text("Lives:" + this.lives);
+			this.vLives.text("Lives:" + this.lives);
+			this.vLivesOutline.x( -1 * this.vLivesOutline.getTextWidth()/2 -1 );
+			this.vLives.x( this.vLivesOutline.x() + 1 );
 		}
 		else if(!this.readyToRespawn) {
 			this.respawnCounter += dTime;
@@ -110,12 +116,13 @@ function createPlayer() {
 		if(exp !== null) {
 			exp.spawnAt( this.x, this.y );
 		}
-
-		this.vScore.x( this.x + 100 );
-		this.vScoreOutline.x( this.vScore.x() -1 );
-		this.vScore.y( this.y + 100 );
-		this.vScoreOutline.y( this.vScore.y() -1 );
-
+		if(this.lives > 0)
+		{
+			this.vScore.x( this.x + 100 );
+			this.vScoreOutline.x( this.vScore.x() -1 );
+			this.vScore.y( this.y + 100 );
+			this.vScoreOutline.y( this.vScore.y() -1 );
+		}
 		this.isAlive = false;//set isAlive to false
 		//remove sprite code here
 		this.x = -100;
@@ -160,6 +167,8 @@ function createPlayer() {
     	var rx = this.vScore.x() - 100;
     	var ry = this.vScore.y() - 100;
     	this.spawnAt( rx, ry );
+		
+		this.lives--;
 
     	this.score -= 10;
     	if(this.score < 0) { this.score = 0; }
@@ -265,6 +274,25 @@ function playerCreateVisual(ref){
 	ref.vGroup.add( ref.vName );
 	ref.vGroup.add( ref.vScoreOutline );
 	ref.vGroup.add( ref.vScore );
+	
+	ref.vLivesOutline = new Konva.Text({
+		x: -100,
+		y: ref.vScore.getTextHeight() + ref.vScore.y(),
+		text: "Lives: 0",
+		fontSize: 20,
+		fontFamily: 'Courier',
+		fill: 'white'
+	});
+	ref.vLives = new Konva.Text({
+		x: -100,
+		y: ref.vLivesOutline.y() + 1,
+		text: "Lives: 0",
+		fontSize: 20,
+		fontFamily: 'Courier',
+		fill: 'green'
+	});
+	ref.vGroup.add( ref.vLivesOutline );
+	ref.vGroup.add( ref.vLives );
 
 
 } //end playerCreateVisual

@@ -86,7 +86,7 @@ function inputMenuPad() {
 		if ( gamepads[i].buttons ) {
 			for (var j = 0 ; j < gamepads[1].buttons.length ; j++) {
 				if ( gamepads[i].buttons ) {
-					keyboardKeys['Enter'] = down;
+					keyboardKeys['Enter'] = "down";
 					return;
 				}
 			}

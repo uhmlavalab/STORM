@@ -120,7 +120,8 @@ function inputGame() {
 			(
 			gameVars.atLeastOnePlayerAlive
 			&& allPlayers[i].readyToRespawn
-			&& ( isKeyboardKeyDown( playerControls[i].shoot ) || isKeyboardKeyDown( playerControls[i].gc_shoot ) )
+			&& allPlayers[i].lives > 0
+			//&& ( isKeyboardKeyDown( playerControls[i].shoot ) || isKeyboardKeyDown( playerControls[i].gc_shoot ) )
 			)
 		{ allPlayers[i].respawn(); } //end else if dead
 	} //end for all players
@@ -129,6 +130,10 @@ function inputGame() {
 	if( !gameVars.atLeastOnePlayerAlive && keyboardKeys["Enter"] === "down" ) {
 		keyboardKeys["Enter"] = 'none';
 		prepAndSwitchToResult();
+	}
+	
+	if( isKeyboardKeyDown("Escape")) {
+		gameVars.atLeastOnePlayerAlive = false;
 	}
 
 } //inputGame
@@ -145,23 +150,33 @@ function inputGamePad() {
 
 	for ( var i = 0; i < gamepads.length; i++ ) {
 		//check for down
-		if (gamepads[i].axes[0] > -.7 ) {
+		if (gamepads[i].axes[0] < -.7 ) {
 			keyboardKeys[ playerControls[i].left ] = "down";
 		}
-		if (gamepads[i].axes[0] > .7 ) {
+		else if (gamepads[i].axes[0] > .7 ) {
 			keyboardKeys[ playerControls[i].right ] = "down";
 		}
-		if (gamepads[i].axes[1] > -.7 ) {
+		else {
+			keyboardKeys[ playerControls[i].left ] = "up";
+			keyboardKeys[ playerControls[i].right ] = "up";
+		}
+		if (gamepads[i].axes[1] < -.7 ) {
 			keyboardKeys[ playerControls[i].up ] = "down";
 		}
-		if (gamepads[i].axes[1] > .7 ) {
+		else if (gamepads[i].axes[1] > .7 ) {
 			keyboardKeys[ playerControls[i].down ] = "down";
+		}
+		else {
+			keyboardKeys[ playerControls[i].up ] = "up";
+			keyboardKeys[ playerControls[i].down ] = "up";
 		}
 
 		//shooting
-		if( gamepads[i].buttons[0] ) {
+		if( gamepads[i].buttons[0].pressed  === true) {
 			keyboardKeys[ playerControls[i].shoot ] = "down";
+			console.log("Player trying to shoot " + gamepads[i].buttons[0] );
 		}
+		
 	}
 }//end inputGamePad
 
@@ -202,7 +217,7 @@ function logicGame() {
 	if( gameVars.atLeastOnePlayerAlive) {
 		var allDead = true;
 		for(var i = 0; i < allPlayers.length; i++) {
-			if(allPlayers[i].isAlive) { allDead = false; break;}
+			if(allPlayers[i].isAlive || allPlayers[i].lives > 0) { allDead = false; break;}
 		}
 		if(allDead) { gameVars.atLeastOnePlayerAlive = false; }
 	}
